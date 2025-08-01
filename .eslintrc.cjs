@@ -3,22 +3,8 @@ module.exports = {
   extends: '@react-native',
   rules: {
     'react-native/no-inline-styles': 0,
-    'no-unused-vars': [
-      'warn',
-      {
-        vars: 'all',
-        args: 'after-used',
-        ignoreRestSiblings: false,
-      },
-    ],
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      {
-        vars: 'all',
-        args: 'after-used',
-        ignoreRestSiblings: false,
-      },
-    ],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
 
     'no-multiple-empty-lines': [
       'error',

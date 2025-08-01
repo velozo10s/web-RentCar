@@ -1,14 +1,15 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "bundler"
+ "compilerOptions": {
+  "module": "es2020",
+  "moduleResolution": "bundler"
+ },
+ "files": [],
+ "references": [
+  {
+   "path": "./tsconfig.app.json"
   },
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  {
+   "path": "./tsconfig.node.json"
+  }
+ ]
 }
