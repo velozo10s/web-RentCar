@@ -1,5 +1,6 @@
 import React, {StrictMode, createContext} from 'react';
 import {createRoot} from 'react-dom/client';
+
 import './index.css';
 import App from './pages/App';
 import rootStore from './lib/stores/rootStore.ts';
