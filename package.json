@@ -16,6 +16,7 @@
   "@emotion/styled": "^11.14.1",
   "@mui/icons-material": "^7.2.0",
   "@mui/material": "^7.2.0",
+  "axios": "^1.11.0",
   "i18next": "^25.3.2",
   "mobx": "^6.13.7",
   "mobx-react-lite": "^4.1.0",
