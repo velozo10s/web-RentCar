@@ -1,5 +1,5 @@
 {
- "appName": "M003",
+ "appName": "M001",
  "greeting": "Welcome, {{name}}!",
  "common": {
   "cancel": "Cancel",
@@ -7,13 +7,22 @@
   "yes": "Yes",
   "no": "No",
   "continue": "Continue",
-  "search": "Search"
+  "search": "Search",
+  "next": "Next",
+  "back": "Back",
+  "any": "All",
+  "reset": "Reset",
+  "apply": "Apply"
+ },
+ "tabNavigator": {
+  "home": "Home",
+  "settings": "Settings"
  },
  "login": {
   "title": "Login",
   "loginButton": "Log in",
-  "email": "Email",
-  "emailPlaceholder": "Email",
+  "user": "User",
+  "userPlaceholder": "User",
   "password": "Password",
   "passwordPlaceholder": "Password",
   "forgotPassword": "Forgot password?",
@@ -22,10 +31,40 @@
  "signUp": {
   "title": "Sign Up",
   "signUpButton": "Sign Up",
+  "documentType": "Document Type",
+  "documentTypePlaceholder": "Select Document Type",
+  "documentNumber": "Document Number",
+  "documentNumberPlaceholder": "Enter your document number",
+  "firstName": "First Name",
+  "firstNamePlaceholder": "Enter your first name",
+  "lastName": "Last Name",
+  "lastNamePlaceholder": "Enter your last name",
+  "phoneNumber": "Phone Number",
+  "phoneNumberPlaceholder": "Enter your phone number",
+  "nationalityCode": "Nationality",
+  "nationalityCodePlaceholder": "Select your nationality",
+  "birthDate": "Birth Date",
+  "birthDatePlaceholder": "Select your birth date",
+  "username": "Username",
+  "usernamePlaceholder": "Choose a username",
   "email": "Email",
+  "emailPlaceholder": "Enter your email",
   "password": "Password",
+  "passwordPlaceholder": "Enter your password",
   "confirmPassword": "Confirm Password",
-  "confirmPasswordPlaceholder": "Confirm Password",
+  "confirmPasswordPlaceholder": "Confirm your password",
+  "context": "Context",
+  "contextPlaceholder": "Select context",
+  "expirationDocument": "Document Expiration Date",
+  "expirationDocumentPlaceholder": "Select expiration date",
+  "expirationLicense": "License Expiration Date",
+  "expirationLicensePlaceholder": "Select expiration date",
+  "passportEntryDate": "Passport Entry Date",
+  "passportEntryDatePlaceholder": "Select entry date",
+  "documentFront": "Front of Document",
+  "documentBack": "Back of Document",
+  "licenseFront": "Front of License",
+  "licenseBack": "Back of License",
   "backToLogin": "Already have an account?"
  },
  "forgotPassword": {
@@ -37,12 +76,57 @@
  "home": {
   "title": "Home Screen"
  },
+ "vehicles": {
+  "search": "Search vehicle",
+  "viewDetails": "View details",
+  "perDay": "/day",
+  "perHour": "/hr",
+  "seats": "seats",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "transmission": {
+   "automatic": "automatic",
+   "manual": "manual"
+  },
+  "type": {
+   "Sedan": "Sedan",
+   "SUV": "SUV",
+   "Truck": "Truck",
+   "Van": "Van",
+   "Electric": "Electric"
+  },
+  "fuel": {
+   "petrol": "petrol",
+   "diesel": "diesel"
+  },
+  "mileage": "mileage",
+  "filters": {
+   "filters": "Filters",
+   "sortBy": "Sort by",
+   "orderAsc": "Asc",
+   "orderDesc": "Desc",
+   "brand": "Brand",
+   "type": "Type",
+   "dates": "Dates",
+   "newest": "Newest",
+   "pricePerDay": "Price/day",
+   "dateHint": "Select both dates to filter by availability",
+   "dateError": "Start and end dates must be set and valid"
+  },
+  "bookNow": "Book Now!",
+  "confirmReservation": "Confirm Reservation"
+ },
  "settings": {
   "title": "Settings Screen",
   "language": "Language",
   "switchLanguage": "Switch Language",
   "toggleTheme": "Toggle Theme",
   "logout": "Log Out"
+ },
+ "drawer": {
+  "preferences": "Preferences",
+  "darkTheme": "Dark Theme",
+  "language": "Language"
  },
  "modals": {
   "userAccount": {
@@ -56,5 +140,23 @@
     "es": "Spanish"
    }
   }
+ },
+ "documentTypes": {
+  "id": "Identity Number",
+  "passport": "Passport"
+ },
+ "snackBarMessages": {
+  "networkError": "Network error. Please check your connection or contact support",
+  "loginError": "Could not log in, try again later",
+  "signUpSuccess": "SignUp complete! :D",
+  "signUpError": "Could not sign up, try again later",
+  "loginSuccess": "Logged in! :D"
+ },
+ "backendRes": {
+  "successLogin": "Logged in! :D",
+  "badReqLogin": "Incorrect Email or Password, please try again",
+  "noCredentials": "User and Password are required.",
+  "incorrectPassword": "Incorrect Password",
+  "unauthorized": "No autorizado"
  }
 }

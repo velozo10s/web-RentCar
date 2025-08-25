@@ -1,5 +1,5 @@
 {
- "appName": "M003",
+ "appName": "M001",
  "greeting": "¡Bienvenido, {{name}}!",
  "common": {
   "cancel": "Cancelar",
@@ -7,13 +7,22 @@
   "yes": "Si",
   "no": "No",
   "continue": "Continuar",
-  "search": "Buscar"
+  "search": "Buscar",
+  "next": "Siguiente",
+  "back": "Atras",
+  "any": "Todos",
+  "reset": "Limpiar",
+  "apply": "aplicar"
+ },
+ "tabNavigator": {
+  "home": "Inicio",
+  "settings": "Configuraciones"
  },
  "login": {
   "title": "Ingresar",
   "loginButton": "Ingresar",
-  "email": "Correo",
-  "emailPlaceholder": "Correo",
+  "user": "Usuario",
+  "userPlaceholder": "Usuario",
   "password": "Contraseña",
   "passwordPlaceholder": "Contraseña",
   "forgotPassword": "Olvidaste tu contraseña?",
@@ -22,12 +31,41 @@
  "signUp": {
   "title": "Registrarse",
   "signUpButton": "Registrarse",
-  "email": "Correo",
+  "documentType": "Tipo de Documento",
+  "documentTypePlaceholder": "Selecciona el tipo de documento",
+  "documentNumber": "Número de Documento",
+  "documentNumberPlaceholder": "Ingresa tu número de documento",
+  "firstName": "Nombre",
+  "firstNamePlaceholder": "Ingresa tu nombre",
+  "lastName": "Apellido",
+  "lastNamePlaceholder": "Ingresa tu apellido",
+  "phoneNumber": "Número de Teléfono",
+  "phoneNumberPlaceholder": "Ingresa tu número de teléfono",
+  "nationalityCode": "Nacionalidad",
+  "nationalityCodePlaceholder": "Selecciona tu nacionalidad",
+  "birthDate": "Fecha de Nacimiento",
+  "birthDatePlaceholder": "Selecciona tu fecha de nacimiento",
+  "username": "Nombre de Usuario",
+  "usernamePlaceholder": "Elige un nombre de usuario",
+  "email": "Correo Electrónico",
+  "emailPlaceholder": "Ingresa tu correo electrónico",
   "password": "Contraseña",
-  "passwordPlaceholder": "Password",
+  "passwordPlaceholder": "Ingresa tu contraseña",
   "confirmPassword": "Confirmar Contraseña",
-  "confirmPasswordPlaceholder": "Confirmar Contraseña",
-  "backToLogin": "Ya tienes una cuenta?"
+  "confirmPasswordPlaceholder": "Confirma tu contraseña",
+  "context": "Contexto",
+  "contextPlaceholder": "Selecciona el contexto",
+  "expirationDocument": "Fecha de Vencimiento del Documento",
+  "expirationDocumentPlaceholder": "Selecciona la fecha de vencimiento",
+  "expirationLicense": "Fecha de Vencimiento de la Licencia",
+  "expirationLicensePlaceholder": "Selecciona la fecha de vencimiento",
+  "passportEntryDate": "Fecha de Entrada del Pasaporte",
+  "passportEntryDatePlaceholder": "Selecciona la fecha de entrada",
+  "documentFront": "Frente del Documento",
+  "documentBack": "Reverso del Documento",
+  "licenseFront": "Frente de la Licencia",
+  "licenseBack": "Reverso de la Licencia",
+  "backToLogin": "¿Ya tienes una cuenta?"
  },
  "forgotPassword": {
   "title": "Recuperar Contraseña",
@@ -38,12 +76,57 @@
  "home": {
   "title": "Pantalla de Inicio"
  },
+ "vehicles": {
+  "search": "Buscar vehiculo",
+  "viewDetails": "Ver detalles",
+  "perDay": "/dia",
+  "perHour": "/hora",
+  "seats": "asientos",
+  "startDate": "Fecha de inicio",
+  "endDate": "Fecha final",
+  "transmission": {
+   "automatic": "automático",
+   "manual": "manual"
+  },
+  "type": {
+   "Sedan": "Sedán",
+   "SUV": "SUV",
+   "Truck": "Camión ligero",
+   "Van": "Furgoneta",
+   "Electric": "Eléctrico"
+  },
+  "fuel": {
+   "petrol": "gasolina",
+   "diesel": "diésel"
+  },
+  "mileage": "kilometraje",
+  "filters": {
+   "filters": "Filtros",
+   "sortBy": "Ordenar por",
+   "orderAsc": "Ascendente",
+   "orderDesc": "Descendente",
+   "brand": "Marca",
+   "type": "Tipo",
+   "dates": "Fechas",
+   "newest": "Mas nuevos",
+   "pricePerDay": "Precio/dia",
+   "dateHint": "Seleccione ambas fechas para filtrar por disponibles.",
+   "dateError": "Fecha de inicio y fin deben ser validos."
+  },
+  "bookNow": "Solicitalo ahora!",
+  "confirmReservation": "Confirmar Reserva"
+ },
  "settings": {
   "title": "Pantalla de Configuraciones",
   "language": "Idioma",
   "switchLanguage": "Cambiar Idioma",
   "toggleTheme": "Cambia Tema",
   "logout": "Cerrar Sesion"
+ },
+ "drawer": {
+  "preferences": "Preferencias",
+  "darkTheme": "Modo Oscuro",
+  "language": "Language"
  },
  "modals": {
   "userAccount": {
@@ -57,5 +140,23 @@
     "es": "Español"
    }
   }
+ },
+ "documentTypes": {
+  "id": "Cedula de identidad",
+  "passport": "Pasaporte"
+ },
+ "snackBarMessages": {
+  "networkError": "Error de red. Por favor, comprueba tu conexión o contacta con soporte",
+  "loginError": "No se pudo iniciar sesión, inténtalo de nuevo más tarde",
+  "signUpSuccess": "¡Usuario registrado con exito! :D",
+  "signUpError": "No se pudo registrar el usuario, inténtalo de nuevo más tarde",
+  "loginSuccess": "¡Sesión iniciada! :D"
+ },
+ "backendRes": {
+  "successLogin": "Sesion iniciada! :D",
+  "badReqLogin": "Email o Contraseña incorrecta, vuelva a intentar",
+  "noCredentials": "Usuario y contraseña son requeridos.",
+  "incorrectPassword": "Contraseña incorrecta",
+  "unauthorized": "Unauthorized"
  }
 }

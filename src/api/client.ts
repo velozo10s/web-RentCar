@@ -41,11 +41,11 @@ class RequestWrapper<T> {
         // HTTP error (server responded with 4xx/5xx)
         if (err.response) {
           if (opts.errorMessage) console.log(opts.errorMessage);
-          opts.onError?.(err);
         } else {
           // Network / no-response error
           console.log('Network error:', err);
         }
+        opts.onError?.(err);
       })
       .finally(() => {
         opts.onFinally?.();

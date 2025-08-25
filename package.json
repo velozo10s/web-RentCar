@@ -17,12 +17,16 @@
   "@mui/icons-material": "^7.2.0",
   "@mui/material": "^7.2.0",
   "axios": "^1.11.0",
+  "formik": "^2.4.6",
   "i18next": "^25.3.2",
   "mobx": "^6.13.7",
   "mobx-react-lite": "^4.1.0",
+  "prop-types": "^15.8.1",
   "react": "^19.1.0",
   "react-dom": "^19.1.0",
-  "react-i18next": "^15.6.1"
+  "react-i18next": "^15.6.1",
+  "react-router-dom": "^7.8.2",
+  "yup": "^1.7.0"
  },
  "devDependencies": {
   "@react-native/eslint-config": "^0.80.2",
