@@ -51,7 +51,7 @@ function App() {
 
         {/*{isLoggedIn ? <Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} /> : <Route path={ROUTES.LOGIN} element={<LoginScreen />} />}*/}
         <Route path={ROUTES.LOGIN} element={<LoginScreen />} />
-        {/*<Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} />*/}
+        <Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} />
       </Routes>
     </>
 

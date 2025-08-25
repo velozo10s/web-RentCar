@@ -1,0 +1,57 @@
+import type { Reservation } from '../lib/types/reservations';
+
+export const RESERVATIONS: Reservation[] = [
+  {
+    id: 1001,
+    customer_user_id: 44,
+    start_at: '2025-07-23T10:00:00Z',
+    end_at:   '2025-08-23T18:00:00Z',
+    status: 'PENDING',
+    note: 'Cliente solicita silla para bebé',
+    total_amount: '1200.00',
+    items: [
+      { vehicle_id: 501, line_amount: 800 },
+      { vehicle_id: 502, line_amount: 400 },
+    ],
+  },
+  {
+    id: 1002,
+    customer_user_id: 11,
+    start_at: '2025-07-23T09:00:00Z',
+    end_at:   '2025-08-23T09:00:00Z',
+    status: 'APPROVED',
+    note: '',
+    total_amount: '900.00',
+    items: [{ vehicle_id: 503, line_amount: 900 }],
+  },
+  {
+    id: 1003,
+    customer_user_id: 99,
+    start_at: '2025-07-25T12:00:00Z',
+    end_at:   '2025-07-30T12:00:00Z',
+    status: 'IN_PROGRESS',
+    note: 'Entrega en aeropuerto',
+    total_amount: '650.00',
+    items: [{ vehicle_id: 504, line_amount: 650 }],
+  },
+  {
+    id: 1004,
+    customer_user_id: 77,
+    start_at: '2025-07-01T08:00:00Z',
+    end_at:   '2025-07-10T18:00:00Z',
+    status: 'FINISHED',
+    note: '',
+    total_amount: '400.00',
+    items: [{ vehicle_id: 505, line_amount: 400 }],
+  },
+  {
+    id: 1005,
+    customer_user_id: 33,
+    start_at: '2025-07-20T08:00:00Z',
+    end_at:   '2025-07-21T18:00:00Z',
+    status: 'CANCELED',
+    note: 'Cancelado por el cliente',
+    total_amount: '0.00',
+    items: [],
+  },
+];

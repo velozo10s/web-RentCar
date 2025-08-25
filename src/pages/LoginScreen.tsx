@@ -75,7 +75,7 @@ export default function LoginPage() {
       //errorMessage: t('snackBarMessages.loginError'),
       onFinally: () => {
         setLoading(false);
-        //navigate(ROUTES.RESERVATIONS)
+        navigate(ROUTES.RESERVATIONS)
       },
     });
   }
