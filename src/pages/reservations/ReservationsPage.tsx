@@ -1,51 +1,81 @@
 import * as React from 'react';
 import {
-  Box, Container, Paper, Stack, TextField, InputAdornment, Select, MenuItem,
+  Box, Paper, Stack, TextField, InputAdornment, Select, MenuItem,
   Button, Typography, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Checkbox, Dialog, DialogTitle, DialogContent,
-  DialogActions, FormControl, FormHelperText
+  DialogActions, FormControl, FormHelperText, LinearProgress
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Sidebar from '../../components/Sidebar';
 import StatusChip from '../../components/StatusChip';
 import type { Reservation } from '../../lib/types/reservations';
-import { RESERVATIONS } from '../../data/reservations.mock';
+import useApi from '../../lib/hooks/useApi';
+import { useStore } from '../../lib/hooks/useStore';
+import {useEffect} from 'react';
 
 const STATUS_OPTIONS = [
-  { value: 'ALL', label: 'Todos' },
-  { value: 'PENDING', label: 'Pendiente' },
-  { value: 'APPROVED', label: 'Aprobada' },
-  { value: 'IN_PROGRESS', label: 'En curso' },
-  { value: 'FINISHED', label: 'Finalizada' },
-  { value: 'CANCELED', label: 'Cancelada' },
+  { value: 'all', label: 'Todos' },
+  { value: 'pending', label: 'Pendiente' },
+  { value: 'confirmed', label: 'Confirmada' },
+  { value: 'active', label: 'En curso' },
+  { value: 'completed', label: 'Finalizada' },
+  { value: 'declined', label: 'Rechazada' },
+  { value: 'cancelled', label: 'Cancelada' },
 ] as const;
 
 type StatusFilter = typeof STATUS_OPTIONS[number]['value'];
 
 export default function ReservationsPage() {
-  const [rows, setRows] = React.useState<Reservation[]>(RESERVATIONS);
+  const api = useApi();
+  const rootStore = useStore();
+
+  const [rows, setRows] = React.useState<Reservation[]>([]);
   const [query, setQuery] = React.useState('');
-  const [status, setStatus] = React.useState<StatusFilter>('ALL');
+  const [status, setStatus] = React.useState<StatusFilter>('all');
   const [selected, setSelected] = React.useState<number[]>([]);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [newStatus, setNewStatus] = React.useState<string>('');
+  const [loading, setLoading] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString();
+  const formatDate = (iso: string) => new Date(iso).toLocaleDateString();
 
+  const fetchReservations = React.useCallback((opts?: { silent?: boolean }) => {
+    if (!opts?.silent) setLoading(true);
+
+    const params = { status }; // <- tal cual pediste
+    api.listReservations(params).handle({
+      onSuccess: (res: Reservation[]) => {
+        setRows(res ?? []);
+      },
+      onError: () => {
+        setLoading(false);
+        setRefreshing(false);
+        // @ts-ignore
+        //rootStore.uiStore.showSnackbar(err?.response?.data?.error ?? 'Error al cargar reservas', 'danger');
+      },
+      onFinally: () => {
+        setLoading(false);
+        setRefreshing(false);
+      },
+    });
+  }, [api, status]);
+
+  // Carga inicial + cada vez que cambia el filtro de estado
+  useEffect(() => {
+    fetchReservations();
+  }, [fetchReservations]);
+
+  // Filtro local por búsqueda
   const filtered = rows.filter(r => {
-    const matchStatus =
-      status === 'ALL' ? true : (r.status || '').toUpperCase() === status;
-
     const q = query.trim().toLowerCase();
-    const itemsVehicleIds = r.items.map(i => String(i.vehicle_id)).join(' ');
-    const matchQuery =
-      !q ||
-      String(r.id).includes(q) ||
-      String(r.customer_user_id).includes(q) ||
-      itemsVehicleIds.includes(q);
+    if (!q) return true;
 
-    return matchStatus && matchQuery;
+    const inId = String(r.id).includes(q);
+    const inCustomer = String(r.customer_user_id).includes(q);
+    const inItems = r.items?.some(i => String(i.vehicle_id).includes(q));
+    const inNote = (r.note || '').toLowerCase().includes(q);
+    return inId || inCustomer || inItems || inNote;
   });
 
   const visibleIds = filtered.map(r => r.id);
@@ -62,13 +92,16 @@ export default function ReservationsPage() {
   const openChangeStatus = () => setDialogOpen(true);
   const closeChangeStatus = () => { setDialogOpen(false); setNewStatus(''); };
 
+  // TODO: aquí podrías llamar a tu endpoint PATCH/PUT para cambiar estado de las seleccionadas
   const applyChangeStatus = () => {
     if (!newStatus) return;
-    setRows(prev =>
-      prev.map(r => (selected.includes(r.id) ? { ...r, status: newStatus } : r))
-    );
+    // ejemplo de optimista local
+    setRows(prev => prev.map(r => (selected.includes(r.id) ? { ...r, status: newStatus } : r)));
     setSelected([]);
     closeChangeStatus();
+    // Si quieres server-side:
+    // await api.changeReservationStatus({ ids: selected, status: newStatus }).handle({...})
+    // luego refetchReservations({ silent: true });
   };
 
   return (
@@ -80,8 +113,11 @@ export default function ReservationsPage() {
 
         {/* Toolbar */}
         <Stack direction={{ xs: 'column', sm: 'row' }} gap={1.5} alignItems={{ xs: 'stretch', sm: 'center' }} mb={2}>
-          <FormControl size="small" sx={{ width: 200 }}>
-            <Select value={status} onChange={(e) => setStatus(e.target.value as StatusFilter)}>
+          <FormControl size="small" sx={{ width: 220 }}>
+            <Select
+              value={status}
+              onChange={(e) => setStatus(e.target.value as StatusFilter)}
+            >
               {STATUS_OPTIONS.map(op => (
                 <MenuItem key={op.value} value={op.value}>{op.label}</MenuItem>
               ))}
@@ -93,7 +129,7 @@ export default function ReservationsPage() {
 
           <TextField
             size="small"
-            placeholder="Buscar (ID reserva, ID cliente o vehicle_id)"
+            placeholder="Buscar (ID, ID cliente, vehicle_id, nota)"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             InputProps={{
@@ -108,6 +144,13 @@ export default function ReservationsPage() {
 
           <Button
             variant="outlined"
+            onClick={() => { setRefreshing(true); fetchReservations({ silent: true }); }}
+          >
+            {refreshing ? 'Actualizando…' : 'Actualizar'}
+          </Button>
+
+          <Button
+            variant="outlined"
             onClick={openChangeStatus}
             disabled={selected.length === 0}
           >
@@ -115,9 +158,11 @@ export default function ReservationsPage() {
           </Button>
         </Stack>
 
+        {loading && <LinearProgress sx={{ mb: 1 }} />}
+
         {/* Tabla */}
         <Paper variant="outlined">
-          <TableContainer sx={{ maxHeight: 'calc(100dvh - 240px)' }}>
+          <TableContainer sx={{ maxHeight: 'calc(100dvh - 260px)' }}>
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
@@ -149,7 +194,7 @@ export default function ReservationsPage() {
                     <TableCell>{row.id}</TableCell>
                     <TableCell>{row.customer_user_id}</TableCell>
                     <TableCell>
-                      {row.items.length > 0
+                      {row.items?.length
                         ? `${row.items.length} vehículo(s) · ${row.items.map(i => i.vehicle_id).join(', ')}`
                         : '—'}
                     </TableCell>
@@ -166,7 +211,7 @@ export default function ReservationsPage() {
                   </TableRow>
                 ))}
 
-                {filtered.length === 0 && (
+                {filtered.length === 0 && !loading && (
                   <TableRow>
                     <TableCell colSpan={8} align="center" sx={{ py: 6, color: 'text.secondary' }}>
                       No hay resultados
@@ -189,7 +234,7 @@ export default function ReservationsPage() {
                 displayEmpty
               >
                 <MenuItem value=""><em>Selecciona un estado</em></MenuItem>
-                {STATUS_OPTIONS.filter(s => s.value !== 'ALL').map(op => (
+                {STATUS_OPTIONS.filter(s => s.value !== 'all').map(op => (
                   <MenuItem key={op.value} value={op.value}>{op.label}</MenuItem>
                 ))}
               </Select>
