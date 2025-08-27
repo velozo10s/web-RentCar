@@ -16,16 +16,32 @@ export const forgotPassword = (data: {[key: string]: any}) => {
   return wrapRequest(client.post('forgot_password_code', data));
 };
 
-export const createReservation = (data: {[key: string]: any}) => {
-  return wrapRequest(client.post('/reservations/', data));
-};
-
 export const listVehicles = (params: {[key: string]: any}) => {
   return wrapRequest(client.get('/vehicles', {params}));
 };
 
 export const listReservations = (params: {[key: string]: any}) => {
   return wrapRequest(client.get('/reservations', {params}));
+};
+
+export const getReservation = (id: number) => {
+  return wrapRequest(client.get(`/reservations/${id}`));
+};
+
+export const confirmReservation = (id: number) => {
+  return wrapRequest(client.patch(`/reservations/${id}/confirm`));
+};
+
+export const declineReservation = (id: number) => {
+  return wrapRequest(client.patch(`/reservations/${id}/decline`));
+};
+
+export const activateReservation = (id: number) => {
+  return wrapRequest(client.patch(`/reservations/${id}/activate`));
+};
+
+export const completeReservation = (id: number) => {
+  return wrapRequest(client.patch(`/reservations/${id}/complete`));
 };
 
 export const getVehicle = (id: number) => {

@@ -158,5 +158,8 @@
   "noCredentials": "User and Password are required.",
   "incorrectPassword": "Incorrect Password",
   "unauthorized": "No autorizado"
+ },
+ "errors": {
+  "required": "This field is required."
  }
 }

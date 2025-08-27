@@ -1,40 +1,39 @@
 import '../App.css'
-import React, { createElement } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import {ROUTES} from '../routes/routes.ts';
+import React from 'react';
+import { Route, Routes, Navigate, Outlet, useLocation } from 'react-router-dom';
+import { ROUTES } from '../routes/routes';
 import LoginScreen from '../pages/LoginScreen';
-import {StoreContext} from '../main.tsx';
-import {CssBaseline} from '@mui/material';
-import ReservationsPage from './reservations/ReservationsPage.tsx';
+import { StoreContext } from '../main';
+import { CssBaseline } from '@mui/material';
+import ReservationsPage from './reservations/ReservationsPage';
+import ReservationDetailPage from './reservations/reservationDetailPage';
 
-// 1) Define el tipo de tu config de rutas
-type AppRoute = {
-  key: string;
-  route?: string;                 // path
-  component?: React.ComponentType; // <Componente /> que se creará con createElement
-  collapse?: AppRoute[];          // subrutas
-};
+// Guard: requiere sesión
+function RequireAuth() {
+  const { userStore } = React.useContext(StoreContext);
+  const isLoggedIn = Boolean(userStore.accessToken);
+  const location = useLocation();
 
-// 2) getRoutes tipado y sin `exact`
-const getRoutes = (allRoutes: AppRoute[]): React.ReactNode =>
-  allRoutes.map((route: AppRoute) => {
-    if (route.collapse) return getRoutes(route.collapse);
+  if (!isLoggedIn) {
+    // recuerda a dónde quería ir, para volver después de loguearse
+    return <Navigate to={ROUTES.LOGIN} replace state={{ from: location }} />;
+  }
+  return <Outlet />;
+}
 
-    if (route.route && route.component) {
-      return (
-        <Route
-          path={route.route}
-          element={createElement(route.component)}
-          key={route.key}
-        />
-      );
-    }
+// Guard: solo invitados (si está logueado, redirige)
+function RequireGuest() {
+  const { userStore } = React.useContext(StoreContext);
+  const isLoggedIn = Boolean(userStore.accessToken);
 
-    return null;
-  });
+  if (isLoggedIn) {
+    return <Navigate to={ROUTES.RESERVATIONS} replace />;
+  }
+  return <Outlet />;
+}
 
 function App() {
-  const {userStore} = React.useContext(StoreContext);
+  const { userStore } = React.useContext(StoreContext);
   const isLoggedIn = Boolean(userStore.accessToken);
 
   return (
@@ -42,19 +41,29 @@ function App() {
       <CssBaseline />
 
       <Routes>
-        {/* Si luego usas una lista de rutas */}
-        {/* {getRoutes(pageRoutes)} */}
+        {/* Rutas públicas solo para no logueados */}
+        <Route element={<RequireGuest />}>
+          <Route path={ROUTES.LOGIN} element={<LoginScreen />} />
+        </Route>
 
-        {/* Rutas públicas sueltas */}
+        {/* Rutas privadas (solo logueados) */}
+        <Route element={<RequireAuth />}>
+          <Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} />
+          <Route path={ROUTES.RESERVATION} element={<ReservationDetailPage />} />
+        </Route>
 
-        {/* <Route path="*" element={<NotFound />} /> */}
-
-        {/*{isLoggedIn ? <Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} /> : <Route path={ROUTES.LOGIN} element={<LoginScreen />} />}*/}
-        <Route path={ROUTES.LOGIN} element={<LoginScreen />} />
-        <Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} />
+        {/* Catch-all: manda a login si no logueado, o a /reservations si sí */}
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={isLoggedIn ? ROUTES.RESERVATIONS : ROUTES.LOGIN}
+              replace
+            />
+          }
+        />
       </Routes>
     </>
-
   );
 }
 
