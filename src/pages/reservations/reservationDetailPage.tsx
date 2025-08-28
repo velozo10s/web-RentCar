@@ -131,14 +131,14 @@ export default function ReservationDetailPage() {
           alignItems="center"
           justifyContent="space-between"
           mb={2}>
-          <Typography variant="h6">Detalle de reserva</Typography>
+          <Typography variant="h5">Detalle de reserva</Typography>
           <Button onClick={() => navigate(-1)}>Volver</Button>
         </Stack>
 
         {loading && <LinearProgress sx={{mb: 2}} />}
 
         {reservation && (
-          <Stack spacing={2}>
+          <Stack spacing={4}>
             <Paper variant="outlined" sx={{p: 2}}>
               <Stack
                 direction={{xs: 'column', sm: 'row'}}
@@ -161,13 +161,21 @@ export default function ReservationDetailPage() {
 
               <Divider sx={{my: 2}} />
 
-              <Stack direction={{xs: 'column', sm: 'row'}} spacing={3}>
+              <Stack direction={{xs: 'column', sm: 'row'}} spacing={10}>
                 <Stack spacing={0.5} sx={{minWidth: 240}}>
                   <Typography variant="body2" color="text.secondary">
-                    Cliente (user_id)
+                    Cliente
                   </Typography>
                   <Typography variant="body1">
-                    {reservation.customer_user_id}
+                    {reservation.document_number}
+                  </Typography>
+                </Stack>
+                <Stack spacing={0.5} sx={{minWidth: 240}}>
+                  <Typography variant="body2" color="text.secondary">
+                    Nombre completo
+                  </Typography>
+                  <Typography variant="body1">
+                    {reservation.full_name}
                   </Typography>
                 </Stack>
                 <Stack spacing={0.5} sx={{minWidth: 280}}>

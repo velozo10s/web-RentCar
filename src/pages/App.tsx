@@ -1,29 +1,31 @@
+// App.tsx
 import '../App.css';
 import React from 'react';
 import {Route, Routes, Navigate, Outlet, useLocation} from 'react-router-dom';
 import {ROUTES} from '../routes/routes';
 import LoginScreen from '../pages/LoginScreen';
 import {StoreContext} from '../main';
-import {CssBaseline} from '@mui/material';
+import {CssBaseline, ThemeProvider} from '@mui/material';
 import ReservationsPage from './reservations/ReservationsPage';
 import ReservationDetailPage from './reservations/reservationDetailPage';
 import HomeScreen from './HomeScreen.tsx';
+import {darkTheme} from '../themes/dark.ts';
+import {observer} from 'mobx-react-lite';
 
 // Guard: requiere sesión
-function RequireAuth() {
+const RequireAuth = observer(function RequireAuth() {
   const {userStore} = React.useContext(StoreContext);
   const isLoggedIn = Boolean(userStore.accessToken);
   const location = useLocation();
 
   if (!isLoggedIn) {
-    // recuerda a dónde quería ir, para volver después de loguearse
     return <Navigate to={ROUTES.LOGIN} replace state={{from: location}} />;
   }
   return <Outlet />;
-}
+});
 
 // Guard: solo invitados (si está logueado, redirige)
-function RequireGuest() {
+const RequireGuest = observer(function RequireGuest() {
   const {userStore} = React.useContext(StoreContext);
   const isLoggedIn = Boolean(userStore.accessToken);
 
@@ -31,24 +33,24 @@ function RequireGuest() {
     return <Navigate to={ROUTES.RESERVATIONS} replace />;
   }
   return <Outlet />;
-}
+});
 
-function App() {
+const App = observer(function App() {
   const {userStore} = React.useContext(StoreContext);
   const isLoggedIn = Boolean(userStore.accessToken);
 
   return (
-    <>
+    <ThemeProvider theme={darkTheme}>
       <CssBaseline />
 
       <Routes>
-        {/* Rutas públicas solo para no logueados */}
+        {/* Públicas solo para no logueados */}
         <Route element={<RequireGuest />}>
           <Route path={ROUTES.ROOT} element={<HomeScreen />} />
           <Route path={ROUTES.LOGIN} element={<LoginScreen />} />
         </Route>
 
-        {/* Rutas privadas (solo logueados) */}
+        {/* Privadas (logueados) */}
         <Route element={<RequireAuth />}>
           <Route path={ROUTES.RESERVATIONS} element={<ReservationsPage />} />
           <Route
@@ -57,7 +59,7 @@ function App() {
           />
         </Route>
 
-        {/* Catch-all: manda a login si no logueado, o a /reservations si sí */}
+        {/* Catch-all */}
         <Route
           path="*"
           element={
@@ -68,8 +70,8 @@ function App() {
           }
         />
       </Routes>
-    </>
+    </ThemeProvider>
   );
-}
+});
 
 export default App;

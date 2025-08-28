@@ -23,7 +23,7 @@ import Sidebar from '../../components/Sidebar';
 import StatusChip from '../../components/StatusChip';
 import type {Reservation} from '../../lib/types/reservations';
 import useApi from '../../lib/hooks/useApi';
-import {useStore} from '../../lib/hooks/useStore';
+//import {useStore} from '../../lib/hooks/useStore';
 import {useCallback, useEffect, useState} from 'react';
 
 const STATUS_OPTIONS = [
@@ -40,7 +40,7 @@ type StatusFilter = (typeof STATUS_OPTIONS)[number]['value'];
 
 export default function ReservationsPage() {
   const api = useApi();
-  const rootStore = useStore();
+  //const rootStore = useStore();
   const navigate = useNavigate();
 
   const [rows, setRows] = useState<Reservation[]>([]);
@@ -128,10 +128,10 @@ export default function ReservationsPage() {
           {/* Que el buscador pueda expandirse */}
           <TextField
             size="small"
-            placeholder="Buscar (ID, ID cliente, vehicle_id, nota)"
+            placeholder="Buscar"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            sx={{width: {xs: '100%', sm: 420}, flexShrink: 0}}
+            sx={{width: {xs: '100%', sm: 300}, flexShrink: 0}}
           />
 
           <Button
@@ -158,7 +158,7 @@ export default function ReservationsPage() {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell>Cliente (user_id)</TableCell>
+                  <TableCell>Cliente</TableCell>
                   <TableCell>Ítems</TableCell>
                   <TableCell>Fecha desde/Hasta</TableCell>
                   <TableCell>Total</TableCell>
@@ -170,7 +170,7 @@ export default function ReservationsPage() {
                 {filtered.map(row => (
                   <TableRow key={row.id} hover>
                     <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.customer_user_id}</TableCell>
+                    <TableCell>{row.document_number}</TableCell>
                     <TableCell>
                       {row.items?.length
                         ? `${row.items.length} vehículo(s) · ${row.items.map(i => i.vehicle_id).join(', ')}`

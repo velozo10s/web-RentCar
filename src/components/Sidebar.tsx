@@ -75,7 +75,7 @@ export default function Sidebar({active = 'reservas'}: Props) {
   });
 
   const widthExpanded = 280;
-  const widthCollapsed = 72;
+  const widthCollapsed = 85;
   const width = collapsed ? widthCollapsed : widthExpanded;
 
   const toggleCollapsed = () => {
