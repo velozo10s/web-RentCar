@@ -15,8 +15,7 @@ import {type TextFieldProps} from '@mui/material/TextField';
 import TextField from '@mui/material/TextField';
 import {useNavigate} from 'react-router-dom';
 
-// ---- Hooks equivalentes a tu app nativa ----
-import useApi from '../lib/hooks/useApi'; // asume api.login({ user, password, context })
+import useApi from '../lib/hooks/useApi';
 import {useStore} from '../lib/hooks/useStore';
 import {ROUTES} from '../routes/routes.ts';
 
@@ -26,7 +25,6 @@ type LoginValues = {
   context: string; // "APP" o "WEB"
 };
 
-// Componente FormikTextField reutilizable (equivalente a tus FormikEmailInput/FormikPasswordInput)
 const FormikTextField: React.FC<TextFieldProps & {name: keyof LoginValues}> = ({
   name,
   ...props

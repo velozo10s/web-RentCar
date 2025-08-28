@@ -24,6 +24,7 @@ import StatusChip from '../../components/StatusChip';
 import type {Reservation} from '../../lib/types/reservations';
 import useApi from '../../lib/hooks/useApi';
 import {useStore} from '../../lib/hooks/useStore';
+import {useCallback, useEffect, useState} from 'react';
 
 const STATUS_OPTIONS = [
   {value: 'all', label: 'Todos'},
@@ -42,15 +43,15 @@ export default function ReservationsPage() {
   const rootStore = useStore();
   const navigate = useNavigate();
 
-  const [rows, setRows] = React.useState<Reservation[]>([]);
-  const [query, setQuery] = React.useState('');
-  const [status, setStatus] = React.useState<StatusFilter>('all');
-  const [loading, setLoading] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [rows, setRows] = useState<Reservation[]>([]);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<StatusFilter>('all');
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString();
 
-  const fetchReservations = React.useCallback(
+  const fetchReservations = useCallback(
     (opts?: {silent?: boolean}) => {
       if (!opts?.silent) setLoading(true);
       const params = {status};
@@ -72,7 +73,7 @@ export default function ReservationsPage() {
     [api, status],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchReservations();
   }, [fetchReservations]);
 
@@ -87,7 +88,7 @@ export default function ReservationsPage() {
   });
 
   return (
-    <Box display="flex" minHeight="100dvh" width="100%">
+    <Box position={'fixed'} display="flex" minHeight="100dvh" width="100%">
       <Sidebar active="reservas" />
 
       <Box

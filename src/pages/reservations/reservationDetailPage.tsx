@@ -28,32 +28,26 @@ import {
   declineReservation,
   activateReservation,
   completeReservation,
-} from '../../api/endpoints.ts'; // ajusta el path a donde tengas estas funcs
+} from '../../api/endpoints.ts';
+import {useCallback, useEffect, useState} from 'react'; // ajusta el path a donde tengas estas funcs
 
-// Si tu API ya tiene getReservation, úsala desde useApi(); si no, ver helper debajo.
 export default function ReservationDetailPage() {
   const {id} = useParams();
   const navigate = useNavigate();
   const api = useApi();
   const rootStore = useStore();
 
-  const [reservation, setReservation] = React.useState<Reservation | null>(
-    null,
-  );
-  const [loading, setLoading] = React.useState(false);
-  const [changing, setChanging] = React.useState(false);
-  const [newStatus, setNewStatus] = React.useState<string>('');
+  const [reservation, setReservation] = useState<Reservation | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [changing, setChanging] = useState(false);
+  const [newStatus, setNewStatus] = useState<string>('');
 
   const formatDateTime = (iso: string) => new Date(iso).toLocaleString();
 
-  const fetchReservation = React.useCallback(() => {
+  const fetchReservation = useCallback(() => {
     if (!id) return;
     setLoading(true);
 
-    // Usa tu api.getReservation si existe:
-    // api.getReservation(Number(id)).handle({ ... })
-
-    // Ejemplo usando client directamente (ver helper abajo si prefieres centralizar):
     api.getReservation(Number(id)).handle({
       onSuccess: (res: Reservation) => setReservation(res),
       onError: () => {
@@ -64,7 +58,7 @@ export default function ReservationDetailPage() {
     });
   }, [api, id]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchReservation();
   }, [fetchReservation]);
 
@@ -91,7 +85,6 @@ export default function ReservationDetailPage() {
     }
 
     setChanging(true);
-    // Optimista local
     const prev = reservation.status;
     setReservation({...reservation, status: newStatus});
 
@@ -122,7 +115,7 @@ export default function ReservationDetailPage() {
   };
 
   return (
-    <Box display="flex" minHeight="100dvh" width="100%">
+    <Box position={'fixed'} display="flex" minHeight="100dvh" width="100%">
       <Sidebar active="reservas" />
 
       <Box
