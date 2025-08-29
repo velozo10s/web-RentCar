@@ -1,3 +1,4 @@
+// Sidebar.tsx
 import * as React from 'react';
 import {
   Box,
@@ -11,14 +12,15 @@ import {
   Paper,
   IconButton,
   Tooltip,
+  Drawer,
 } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import MailIcon from '@mui/icons-material/Mail';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
 import useApi from '../lib/hooks/useApi';
 import rootStore from '../lib/stores/rootStore';
 import {ROUTES} from '../routes/routes';
@@ -26,6 +28,11 @@ import {useNavigate} from 'react-router-dom';
 
 type Props = {
   active?: 'inicio' | 'reservas' | 'vehiculos' | 'reportes' | 'clientes';
+  /** 'permanent' = en columna, 'temporary' = overlay sobre el contenido */
+  variant?: 'permanent' | 'temporary';
+  /** Solo para variant='temporary' */
+  open?: boolean;
+  onClose?: () => void;
 };
 
 const NAV_ITEMS = [
@@ -61,11 +68,16 @@ const NAV_ITEMS = [
   },
 ] as const;
 
-export default function Sidebar({active = 'reservas'}: Props) {
+export default function Sidebar({
+  active = 'reservas',
+  variant = 'permanent',
+  open = false,
+  onClose,
+}: Props) {
   const api = useApi();
   const navigate = useNavigate();
 
-  // Lee estado inicial desde localStorage para recordar preferencia
+  // Estado colapsado SOLO aplica a 'permanent'
   const [collapsed, setCollapsed] = React.useState<boolean>(() => {
     try {
       return JSON.parse(localStorage.getItem('sidebar:collapsed') || 'false');
@@ -76,7 +88,8 @@ export default function Sidebar({active = 'reservas'}: Props) {
 
   const widthExpanded = 280;
   const widthCollapsed = 85;
-  const width = collapsed ? widthCollapsed : widthExpanded;
+  const width =
+    variant === 'permanent' && collapsed ? widthCollapsed : widthExpanded;
 
   const toggleCollapsed = () => {
     setCollapsed(v => {
@@ -95,19 +108,19 @@ export default function Sidebar({active = 'reservas'}: Props) {
     });
   };
 
-  return (
+  const Content = (
     <Paper
       elevation={1}
       sx={{
-        height: '100dvh',
+        minHeight: '100dvh',
         width,
         borderRadius: 0,
-        position: 'sticky',
+        position: variant === 'permanent' ? 'sticky' : 'relative',
         top: 0,
         left: 0,
         display: 'flex',
         flexDirection: 'column',
-        flexShrink: 0, // 👈 clave
+        flexShrink: 0,
         px: 1,
         py: 2,
         gap: 1,
@@ -116,49 +129,96 @@ export default function Sidebar({active = 'reservas'}: Props) {
             duration: theme.transitions.duration.shorter,
           }),
       }}>
-      {/* Header */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1.5,
-          px: 1,
-          minHeight: 40,
-        }}>
-        <DirectionsCarIcon />
-        {!collapsed && (
-          <Typography variant="h6" fontWeight={700} noWrap>
-            Rent Car
-          </Typography>
-        )}
+      {variant === 'permanent' ? (
+        <List sx={{px: collapsed ? 0 : 1}}>
+          <Tooltip
+            title={collapsed ? 'Expandir menú' : 'Colapsar menú'}
+            placement={collapsed ? 'right' : 'bottom'}>
+            <ListItemButton
+              onClick={toggleCollapsed}
+              aria-label={collapsed ? 'Expandir menú' : 'Colapsar menú'}
+              aria-expanded={!collapsed}
+              sx={{
+                mb: 0.5,
+                borderRadius: 1,
+                minHeight: 40,
+                alignSelf: 'stretch',
+                px: collapsed ? 1 : 1.5,
+                justifyContent: collapsed ? 'center' : 'space-between',
+              }}>
+              {/* Izquierda: icono + título (solo cuando NO está colapsado) */}
+              {!collapsed && (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}>
+                  <DirectionsCarIcon sx={{mr: 1}} />
+                  <ListItemText primary="Rent Car" />
+                </Box>
+              )}
 
-        {/* Botón de colapso */}
-        <IconButton
-          size="small"
-          onClick={toggleCollapsed}
-          sx={{ml: 'auto'}}
-          aria-label={collapsed ? 'Expandir menú' : 'Colapsar menú'}>
-          {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-        </IconButton>
-      </Box>
-
+              {/* Derecha (o centrado en colapsado): hamburguesa */}
+              <ListItemIcon
+                sx={{
+                  minWidth: collapsed ? 0 : 36,
+                  mr: collapsed ? 0 : 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}>
+                <MenuIcon />
+              </ListItemIcon>
+            </ListItemButton>
+          </Tooltip>
+        </List>
+      ) : (
+        // Header para 'temporary': título + botón cerrar
+        <Box
+          sx={{
+            px: 2,
+            pb: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}>
+            <DirectionsCarIcon />
+            <Typography variant="subtitle1" fontWeight={600}>
+              Rent Car
+            </Typography>
+          </Box>
+          <IconButton aria-label="Cerrar menú" onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      )}
       <Divider />
-
       {/* Navegación */}
-      <List sx={{px: collapsed ? 0 : 1}}>
+      <List sx={{px: variant === 'permanent' && collapsed ? 0 : 1}}>
         {NAV_ITEMS.map(item => {
           const selected = active === item.key;
           const content = (
             <ListItemButton
               key={item.key}
               selected={selected}
-              onClick={() => navigate(item.to)}
+              onClick={() => {
+                navigate(item.to);
+                onClose?.();
+              }}
               sx={{
                 mb: 0.5,
                 borderRadius: 1,
                 minHeight: 40,
-                px: collapsed ? 1 : 1.5,
-                justifyContent: collapsed ? 'center' : 'flex-start',
+                px: variant === 'permanent' && collapsed ? 1 : 1.5,
+                justifyContent:
+                  variant === 'permanent' && collapsed
+                    ? 'center'
+                    : 'flex-start',
                 '&.Mui-selected': {
                   bgcolor: 'primary.main',
                   color: 'primary.contrastText',
@@ -168,20 +228,21 @@ export default function Sidebar({active = 'reservas'}: Props) {
               }}>
               <ListItemIcon
                 sx={{
-                  minWidth: collapsed ? 0 : 36,
-                  mr: collapsed ? 0 : 1,
+                  minWidth: variant === 'permanent' && collapsed ? 0 : 36,
+                  mr: variant === 'permanent' && collapsed ? 0 : 1,
                   display: 'flex',
                   justifyContent: 'center',
                 }}>
                 {item.icon}
               </ListItemIcon>
-              {!collapsed && <ListItemText primary={item.label} />}
+              {!(variant === 'permanent' && collapsed) && (
+                <ListItemText primary={item.label} />
+              )}
             </ListItemButton>
           );
 
-          return collapsed ? (
+          return variant === 'permanent' && collapsed ? (
             <Tooltip key={item.key} title={item.label} placement="right">
-              {/* span para que Tooltip pueda envolver el botón */}
               <span>{content}</span>
             </Tooltip>
           ) : (
@@ -189,21 +250,16 @@ export default function Sidebar({active = 'reservas'}: Props) {
           );
         })}
       </List>
-
-      {/* Empuja el footer al fondo */}
       <Box sx={{mt: 'auto'}} />
-
       {/* Footer / Logout */}
-      <Box sx={{px: collapsed ? 1 : 2, pb: 1}}>
-        {collapsed ? (
+      <Box sx={{px: variant === 'permanent' && collapsed ? 1 : 2, pb: 1}}>
+        {variant === 'permanent' && collapsed ? (
           <Tooltip title="Cerrar sesión" placement="right">
             <IconButton
               color="primary"
               onClick={logout}
               size="large"
               sx={{mx: 'auto', display: 'block'}}>
-              {/* Reusamos el ícono de mail solo como placeholder si querés,
-                  pero idealmente usa un ícono de logout */}
               <ReceiptLongIcon />
             </IconButton>
           </Tooltip>
@@ -219,4 +275,21 @@ export default function Sidebar({active = 'reservas'}: Props) {
       </Box>
     </Paper>
   );
+
+  // Overlay (encima de todo)
+  if (variant === 'temporary') {
+    return (
+      <Drawer
+        variant="temporary"
+        open={open}
+        onClose={onClose}
+        ModalProps={{keepMounted: true}}
+        PaperProps={{sx: {width: widthExpanded}}}>
+        {Content}
+      </Drawer>
+    );
+  }
+
+  // Permanente (en columna)
+  return Content;
 }

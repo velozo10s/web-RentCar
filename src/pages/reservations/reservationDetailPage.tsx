@@ -30,6 +30,7 @@ import {
   completeReservation,
 } from '../../api/endpoints.ts';
 import {useCallback, useEffect, useState} from 'react'; // ajusta el path a donde tengas estas funcs
+import AppShell from '../../components/AppShell.tsx';
 
 export default function ReservationDetailPage() {
   const {id} = useParams();
@@ -115,24 +116,30 @@ export default function ReservationDetailPage() {
   };
 
   return (
-    <Box position={'fixed'} display="flex" minHeight="100dvh" width="100%">
-      <Sidebar active="reservas" />
-
+    <AppShell>
       <Box
         component="main"
         sx={{
-          flex: 1,
+          width: '100%',
           p: 3,
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          mb={2}>
-          <Typography variant="h5">Detalle de reserva</Typography>
-          <Button onClick={() => navigate(-1)}>Volver</Button>
+        <Stack direction="row" alignItems="center" mb={2}>
+          <Typography
+            variant="h6"
+            sx={{
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              whiteSpace: 'nowrap',
+            }}>
+            Detalle de reserva
+          </Typography>
+
+          <Box sx={{ml: 'auto'}}>
+            <Button onClick={() => navigate(-1)}>Volver</Button>
+          </Box>
         </Stack>
 
         {loading && <LinearProgress sx={{mb: 2}} />}
@@ -161,8 +168,11 @@ export default function ReservationDetailPage() {
 
               <Divider sx={{my: 2}} />
 
-              <Stack direction={{xs: 'column', sm: 'row'}} spacing={10}>
-                <Stack spacing={0.5} sx={{minWidth: 240}}>
+              <Stack
+                direction={{xs: 'column', sm: 'row'}}
+                justifyContent="space-between"
+                spacing={10}>
+                <Stack spacing={0.5}>
                   <Typography variant="body2" color="text.secondary">
                     Cliente
                   </Typography>
@@ -170,7 +180,7 @@ export default function ReservationDetailPage() {
                     {reservation.document_number}
                   </Typography>
                 </Stack>
-                <Stack spacing={0.5} sx={{minWidth: 240}}>
+                <Stack spacing={0.5}>
                   <Typography variant="body2" color="text.secondary">
                     Nombre completo
                   </Typography>
@@ -178,7 +188,7 @@ export default function ReservationDetailPage() {
                     {reservation.full_name}
                   </Typography>
                 </Stack>
-                <Stack spacing={0.5} sx={{minWidth: 280}}>
+                <Stack spacing={0.5}>
                   <Typography variant="body2" color="text.secondary">
                     Desde
                   </Typography>
@@ -186,7 +196,7 @@ export default function ReservationDetailPage() {
                     {formatDateTime(reservation.start_at)}
                   </Typography>
                 </Stack>
-                <Stack spacing={0.5} sx={{minWidth: 280}}>
+                <Stack spacing={0.5}>
                   <Typography variant="body2" color="text.secondary">
                     Hasta
                   </Typography>
@@ -194,7 +204,7 @@ export default function ReservationDetailPage() {
                     {formatDateTime(reservation.end_at)}
                   </Typography>
                 </Stack>
-                <Stack spacing={0.5} sx={{minWidth: 200}}>
+                <Stack spacing={0.5}>
                   <Typography variant="body2" color="text.secondary">
                     Total
                   </Typography>
@@ -289,6 +299,6 @@ export default function ReservationDetailPage() {
           </Stack>
         )}
       </Box>
-    </Box>
+    </AppShell>
   );
 }

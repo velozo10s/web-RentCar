@@ -23,6 +23,7 @@ import Sidebar from '../../components/Sidebar';
 import StatusChip from '../../components/StatusChip';
 import type {Reservation} from '../../lib/types/reservations';
 import useApi from '../../lib/hooks/useApi';
+import AppShell from '../../components/AppShell.tsx';
 //import {useStore} from '../../lib/hooks/useStore';
 import {useCallback, useEffect, useState} from 'react';
 
@@ -88,13 +89,10 @@ export default function ReservationsPage() {
   });
 
   return (
-    <Box position={'fixed'} display="flex" minHeight="100dvh" width="100%">
-      <Sidebar active="reservas" />
-
+    <AppShell>
       <Box
         component="main"
         sx={{
-          flex: 1,
           p: 3,
           display: 'flex',
           flexDirection: 'column',
@@ -151,7 +149,6 @@ export default function ReservationsPage() {
           variant="outlined"
           sx={{
             display: 'flex',
-            minWidth: 0, // permite que la tabla use el 100%
           }}>
           <TableContainer sx={{flex: 1 /* altura completa */, width: '100%'}}>
             <Table stickyHeader size="small">
@@ -214,6 +211,6 @@ export default function ReservationsPage() {
           </TableContainer>
         </Paper>
       </Box>
-    </Box>
+    </AppShell>
   );
 }
