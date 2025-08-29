@@ -18,7 +18,6 @@ import {
   TableRow,
 } from '@mui/material';
 import {useParams, useNavigate} from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
 import StatusChip from '../../components/StatusChip';
 import type {Reservation} from '../../lib/types/reservations';
 import useApi from '../../lib/hooks/useApi';
@@ -235,8 +234,11 @@ export default function ReservationDetailPage() {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>vehicle_id</TableCell>
-                      <TableCell align="right">line_amount</TableCell>
+                      <TableCell>ID</TableCell>
+                      <TableCell>Marca</TableCell>
+                      <TableCell>Modelo</TableCell>
+                      <TableCell>Año</TableCell>
+                      <TableCell align="right">Monto</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -244,6 +246,9 @@ export default function ReservationDetailPage() {
                       reservation.items.map((it, idx) => (
                         <TableRow key={idx}>
                           <TableCell>{it.vehicle_id}</TableCell>
+                          <TableCell>{it.brand_name}</TableCell>
+                          <TableCell>{it.model}</TableCell>
+                          <TableCell>{it.year}</TableCell>
                           <TableCell align="right">
                             {Number(it.line_amount).toLocaleString(undefined, {
                               style: 'currency',

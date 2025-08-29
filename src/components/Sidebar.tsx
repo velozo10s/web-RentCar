@@ -283,8 +283,7 @@ export default function Sidebar({
         variant="temporary"
         open={open}
         onClose={onClose}
-        ModalProps={{keepMounted: true}}
-        PaperProps={{sx: {width: widthExpanded}}}>
+        ModalProps={{keepMounted: true}}>
         {Content}
       </Drawer>
     );
