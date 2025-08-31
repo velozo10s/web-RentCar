@@ -1,8 +1,27 @@
 module.exports = {
   root: true,
-  extends: '@react-native',
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/recommended', // si usas TS
+    'plugin:prettier/recommended', // si usas Prettier
+  ],
+  parser: '@typescript-eslint/parser', // si usas TS
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  plugins: ['react', '@typescript-eslint'],
   rules: {
-    'react-native/no-inline-styles': 0,
     'no-unused-vars': 'off',
     'no-void': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
@@ -15,6 +34,11 @@ module.exports = {
         maxBOF: 0,
       },
     ],
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
   ignorePatterns: ['*.config.js', 'postcss.config.js', 'tailwind.config.ts'],
 };
