@@ -5,6 +5,7 @@ import {BrowserRouter} from 'react-router-dom';
 import './index.css';
 import App from './pages/App';
 import rootStore from './lib/stores/rootStore.ts';
+import {SnackbarProvider} from './lib/providers/SnackbarProvider.tsx';
 
 export const StoreContext = createContext(rootStore);
 
@@ -15,7 +16,9 @@ root.render(
   <BrowserRouter>
     <StrictMode>
       <StoreContext.Provider value={rootStore}>
-        <App />
+        <SnackbarProvider>
+          <App />
+        </SnackbarProvider>
       </StoreContext.Provider>
     </StrictMode>
   </BrowserRouter>,
