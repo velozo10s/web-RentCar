@@ -6,6 +6,7 @@ import axios, {
   type AxiosResponse,
 } from 'axios';
 import rootStore from '../lib/stores/rootStore.ts';
+import i18n from 'i18next';
 
 // -------------------- Axios instances --------------------
 const client: AxiosInstance = axios.create({
@@ -124,6 +125,10 @@ export type HandleOptions<T> = {
   onFinally?: () => void;
 };
 
+export type ApiErrorData = {
+  localKey?: string;
+};
+
 class RequestWrapper<T> {
   constructor(private promise: Promise<AxiosResponse<T>>) {}
 
@@ -133,9 +138,16 @@ class RequestWrapper<T> {
         if (opts.successMessage) console.log(opts.successMessage);
         opts.onSuccess?.(res.data);
       })
-      .catch((err: AxiosError) => {
-        if (err.response) {
-          if (opts.errorMessage) console.log(opts.errorMessage);
+      .catch((err: AxiosError<ApiErrorData>) => {
+        if (!!err.response) {
+          if (opts.errorMessage) {
+            rootStore.uiStore.showSnackbar(opts.errorMessage, 'danger');
+          } else if (err && err.response?.data?.localKey) {
+            rootStore.uiStore.showSnackbar(
+              i18n.t(err.response?.data?.localKey),
+              'danger',
+            );
+          }
         } else {
           console.log('Network error:', err);
         }

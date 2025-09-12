@@ -1,7 +1,18 @@
 {
  "compilerOptions": {
-  "module": "es2020",
-  "moduleResolution": "bundler"
+  "types": [
+   "vitest/globals",
+   "vitest",
+   "@testing-library/jest-dom"
+  ],
+  "include": [
+   "src",
+   "vitest.config.ts"
+  ],
+  "moduleResolution": "bundler",
+  // <- ayuda a resolver ESM modernos
+  "jsx": "react-jsx",
+  "skipLibCheck": true
  },
  "files": [],
  "references": [

@@ -16,7 +16,7 @@ const languageDetector: LanguageDetectorModule = {
   detect: () => {
     let selected = 'en';
     try {
-      const stored = localStorage.getItem(LANG_KEY);
+      const stored = 'es';
       if (stored) {
         selected = stored;
       } else {
