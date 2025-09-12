@@ -18,6 +18,7 @@ import {useNavigate} from 'react-router-dom';
 import useApi from '../lib/hooks/useApi';
 import {useStore} from '../lib/hooks/useStore';
 import {ROUTES} from '../routes/routes.ts';
+import LanguageSwitcher from '../components/organisms/LanguageSwitcher.tsx';
 
 type LoginValues = {
   user: string;
@@ -104,6 +105,9 @@ export default function LoginPage() {
         backgroundColor: 'background.default',
         p: 2, // respiro en móviles
       }}>
+      <LanguageSwitcher
+        iconButtonProps={{sx: {position: 'absolute', top: 8, right: 8}}}
+      />
       <Paper
         elevation={6}
         sx={{width: '100%', maxWidth: 420, p: {xs: 3, sm: 4}, borderRadius: 3}}>
