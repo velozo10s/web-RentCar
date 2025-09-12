@@ -1,5 +1,5 @@
 {
- "appName": "M001",
+ "appName": "Rent Car",
  "greeting": "¡Bienvenido, {{name}}!",
  "common": {
   "cancel": "Cancelar",
@@ -12,7 +12,8 @@
   "back": "Atras",
   "any": "Todos",
   "reset": "Limpiar",
-  "apply": "aplicar"
+  "apply": "aplicar",
+  "inbox": "Recibidos"
  },
  "tabNavigator": {
   "home": "Inicio",
@@ -97,9 +98,11 @@
   },
   "fuel": {
    "petrol": "gasolina",
-   "diesel": "diésel"
+   "diesel": "diésel",
+   "electric": "electrico"
   },
   "mileage": "kilometraje",
+  "insuranceFee": "Seguro",
   "filters": {
    "filters": "Filtros",
    "sortBy": "Ordenar por",
@@ -114,7 +117,8 @@
    "dateError": "Fecha de inicio y fin deben ser validos."
   },
   "bookNow": "Solicitalo ahora!",
-  "confirmReservation": "Confirmar Reserva"
+  "confirmReservation": "Confirmar",
+  "bookYourReservation": "Solicitalo ahora"
  },
  "settings": {
   "title": "Pantalla de Configuraciones",
@@ -130,7 +134,7 @@
  },
  "modals": {
   "userAccount": {
-   "title": "M001"
+   "title": "Usuario: {{username}}"
   },
   "selectLanguageModal": {
    "title": "Seleccionar Idioma",
@@ -147,19 +151,123 @@
  },
  "snackBarMessages": {
   "networkError": "Error de red. Por favor, comprueba tu conexión o contacta con soporte",
+  "generalError": "Algo ha salido mal. Por favor reintente o contacte con soporte",
   "loginError": "No se pudo iniciar sesión, inténtalo de nuevo más tarde",
   "signUpSuccess": "¡Usuario registrado con exito! :D",
   "signUpError": "No se pudo registrar el usuario, inténtalo de nuevo más tarde",
-  "loginSuccess": "¡Sesión iniciada! :D"
+  "loginSuccess": "Bienvenido {{username}} :D",
+  "bookSuccess": "¡Tu solicitud de reserva de coche se ha enviado con éxito!"
  },
  "backendRes": {
   "successLogin": "Sesion iniciada! :D",
   "badReqLogin": "Email o Contraseña incorrecta, vuelva a intentar",
   "noCredentials": "Usuario y contraseña son requeridos.",
   "incorrectPassword": "Contraseña incorrecta",
-  "unauthorized": "Unauthorized"
+  "unauthorized": "Unauthorized",
+  "forbidden": "No permitido: No cuenta con los permisos suficientes.",
+  "userNotFound": "Usuario no encontrado.",
+  "signUp": {
+   "noRequiredFields": "Faltan campos obligatorios.",
+   "alreadyExists": "El usuario/correo no esta disponible."
+  },
+  "reservation": {
+   "noRequiredFields": "Faltan campos obligatorios.",
+   "vehiclesNotFound": "Uno o mas vehiculos no fueron encontrados.",
+   "inactive": "Uno o mas vehiculos estan inactivos.",
+   "confirmed": "Uno o mas vehiculos no se encuentran disponibles.",
+   "error": "No se pudo registrar la solicitud, inténtalo de nuevo más tarde",
+   "reservationNotFound": "No se ha encontrado la reserva.",
+   "invalidId": "Identificador invalido.",
+   "invalidStatus": "Filtro de estado invalido.",
+   "invalidStatusChange": "No se permite ese cambio de estado",
+   "invalidCustomerStatus": "Identificador del usuario invalido.",
+   "notOwner": "Esta reserva no es tuya.",
+   "cannotCancelled": "No se puede cancelar despues de la fecha de inicio."
+  }
  },
  "errors": {
-  "required": "Este campo es obligatorio."
+  "required": "{{field}} es requerido"
+ },
+ "languages": {
+  "english": "Ingles",
+  "spanish": "Español"
+ },
+ "sidebar": {
+  "home": "Inicio",
+  "reservations": "Reservas",
+  "vehicles": "Vehículos",
+  "reports": "Reportes",
+  "customers": "Clientes",
+  "logout": "Cerrar sesión",
+  "expandMenu": "Expandir menú",
+  "collapseMenu": "Colapsar menú",
+  "closeMenu": "Cerrar menú"
+ },
+ "reservations": {
+  "title": "Reservas",
+  "detail": {
+   "title": "Detalle de reserva",
+   "reservation": "Reserva",
+   "currentStatus": "Estado actual",
+   "customer": "Cliente",
+   "fullName": "Nombre completo",
+   "start": "Desde",
+   "end": "Hasta",
+   "total": "Total",
+   "note": "Nota",
+   "vehicles": "Vehículos",
+   "vehiclesTable": {
+    "columns": {
+     "id": "ID",
+     "brand": "Marca",
+     "model": "Modelo",
+     "year": "Año",
+     "amount": "Monto"
+    }
+   },
+   "changeStatus": {
+    "title": "Cambiar estado",
+    "placeholder": "Selecciona un estado",
+    "applying": "Aplicando…",
+    "notAllowed": "Ese estado no se puede cambiar desde aquí"
+   },
+   "toasts": {
+    "updated": "Estado actualizado",
+    "updateError": "Error al actualizar"
+   }
+  },
+  "filters": {
+   "status": "Estado",
+   "all": "Todos",
+   "searchPlaceholder": "Buscar",
+   "refresh": "Actualizar",
+   "refreshing": "Actualizando..."
+  },
+  "table": {
+   "columns": {
+    "id": "ID",
+    "customer": "Cliente",
+    "items": "Items",
+    "dateRange": "Desde/Hasta",
+    "to": "hasta",
+    "total": "Total",
+    "status": "Estadp",
+    "actions": "Acciones"
+   },
+   "itemsSingular": "vehiculo",
+   "itemsPlural": "vehiculo(s)"
+  },
+  "actions": {
+   "viewDetail": "Ver detalle"
+  },
+  "status": {
+   "all": "Todos",
+   "pending": "Pendiente",
+   "confirmed": "Confirmado",
+   "active": "En curso",
+   "completed": "Finalizado",
+   "declined": "Rechazado",
+   "cancelled": "Cancelado"
+  }
  }
 }

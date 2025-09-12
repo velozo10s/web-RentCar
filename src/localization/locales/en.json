@@ -1,5 +1,5 @@
 {
- "appName": "M001",
+ "appName": "Rent Car",
  "greeting": "Welcome, {{name}}!",
  "common": {
   "cancel": "Cancel",
@@ -12,7 +12,8 @@
   "back": "Back",
   "any": "All",
   "reset": "Reset",
-  "apply": "Apply"
+  "apply": "Apply",
+  "inbox": "Inbox"
  },
  "tabNavigator": {
   "home": "Home",
@@ -97,9 +98,11 @@
   },
   "fuel": {
    "petrol": "petrol",
-   "diesel": "diesel"
+   "diesel": "diesel",
+   "electric": "electric"
   },
   "mileage": "mileage",
+  "insuranceFee": "Insurance Fee",
   "filters": {
    "filters": "Filters",
    "sortBy": "Sort by",
@@ -114,7 +117,8 @@
    "dateError": "Start and end dates must be set and valid"
   },
   "bookNow": "Book Now!",
-  "confirmReservation": "Confirm Reservation"
+  "confirmReservation": "Confirm",
+  "bookYourReservation": "Book your reservation"
  },
  "settings": {
   "title": "Settings Screen",
@@ -130,7 +134,7 @@
  },
  "modals": {
   "userAccount": {
-   "title": "M001"
+   "title": "User: {{username}}"
   },
   "selectLanguageModal": {
    "title": "Select Language",
@@ -147,19 +151,123 @@
  },
  "snackBarMessages": {
   "networkError": "Network error. Please check your connection or contact support",
+  "generalError": "Something went wrong. Please retry or contact support",
   "loginError": "Could not log in, try again later",
   "signUpSuccess": "SignUp complete! :D",
   "signUpError": "Could not sign up, try again later",
-  "loginSuccess": "Logged in! :D"
+  "loginSuccess": "Welcome {{username}} :D",
+  "bookSuccess": "Your car booking request has been submitted successfully!"
  },
  "backendRes": {
   "successLogin": "Logged in! :D",
   "badReqLogin": "Incorrect Email or Password, please try again",
   "noCredentials": "User and Password are required.",
   "incorrectPassword": "Incorrect Password",
-  "unauthorized": "No autorizado"
+  "unauthorized": "Unauthorized",
+  "forbidden": "Forbidden: insufficient permissions",
+  "userNotFound": "User not found.",
+  "signUp": {
+   "noRequiredFields": "There are some required fields missing.",
+   "alreadyExists": "The username/email is not available."
+  },
+  "reservation": {
+   "noRequiredFields": "There are some required fields missing.",
+   "vehiclesNotFound": "One or more vehicles are not found.",
+   "inactive": "One or more vehicles are inactives.",
+   "confirmed": "One or more vehicles are not available.",
+   "error": "Could not book the car(s), try again later",
+   "reservationNotFound": "Reservation not found.",
+   "invalidId": "Invalid id",
+   "invalidStatus": "Invalid status.",
+   "invalidStatusChange": "Invalid status change",
+   "invalidCustomerStatus": "Invalid customer status.",
+   "notOwner": "Not your reservation.",
+   "cannotCancelled": "Cannot cancel after start time."
+  }
  },
  "errors": {
-  "required": "This field is required."
+  "required": "{{field}} is required"
+ },
+ "languages": {
+  "english": "English",
+  "spanish": "Spanish"
+ },
+ "sidebar": {
+  "home": "Home",
+  "reservations": "Reservations",
+  "vehicles": "Vehicles",
+  "reports": "Reports",
+  "customers": "Customers",
+  "logout": "Log out",
+  "expandMenu": "Expand menu",
+  "collapseMenu": "Collapse menu",
+  "closeMenu": "Close menu"
+ },
+ "reservations": {
+  "title": "Reservations",
+  "detail": {
+   "title": "Reservation detail",
+   "reservation": "Reservation",
+   "currentStatus": "Current status",
+   "customer": "Customer",
+   "fullName": "Full name",
+   "start": "Start",
+   "end": "End",
+   "total": "Total",
+   "note": "Note",
+   "vehicles": "Vehicles",
+   "vehiclesTable": {
+    "columns": {
+     "id": "ID",
+     "brand": "Brand",
+     "model": "Model",
+     "year": "Year",
+     "amount": "Amount"
+    }
+   },
+   "changeStatus": {
+    "title": "Change status",
+    "placeholder": "Select a status",
+    "applying": "Applying…",
+    "notAllowed": "That status cannot be changed here"
+   },
+   "toasts": {
+    "updated": "Status updated",
+    "updateError": "Could not update"
+   }
+  },
+  "filters": {
+   "status": "Status",
+   "all": "All",
+   "searchPlaceholder": "Search",
+   "refresh": "Refresh",
+   "refreshing": "Refreshing..."
+  },
+  "table": {
+   "columns": {
+    "id": "ID",
+    "customer": "Customer",
+    "items": "Items",
+    "dateRange": "From/To",
+    "to": "to",
+    "total": "Total",
+    "status": "Status",
+    "actions": "Actions"
+   },
+   "itemsSingular": "vehicle",
+   "itemsPlural": "vehicle(s)"
+  },
+  "actions": {
+   "viewDetail": "View detail"
+  },
+  "status": {
+   "all": "All",
+   "pending": "Pending",
+   "confirmed": "Confirmed",
+   "active": "In progress",
+   "completed": "Completed",
+   "declined": "Declined",
+   "cancelled": "Cancelled"
+  }
  }
 }

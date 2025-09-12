@@ -21,48 +21,54 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import MailIcon from '@mui/icons-material/Mail';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
 import useApi from '../lib/hooks/useApi';
 import rootStore from '../lib/stores/rootStore';
 import {ROUTES} from '../routes/routes';
-import {useNavigate} from 'react-router-dom';
 
 type Props = {
   active?: 'inicio' | 'reservas' | 'vehiculos' | 'reportes' | 'clientes';
-  /** 'permanent' = en columna, 'temporary' = overlay sobre el contenido */
   variant?: 'permanent' | 'temporary';
-  /** Solo para variant='temporary' */
   open?: boolean;
   onClose?: () => void;
 };
 
-const NAV_ITEMS = [
+type NavItem = {
+  key: NonNullable<Props['active']>;
+  localeKey: string;
+  icon: React.ReactNode;
+  to: string;
+};
+
+const NAV_ITEMS: readonly NavItem[] = [
   {
     key: 'inicio',
-    label: 'Inicio',
+    localeKey: 'sidebar.home',
     icon: <DashboardIcon />,
     to: ROUTES.HOME ?? '/',
   },
   {
     key: 'reservas',
-    label: 'Reservas',
+    localeKey: 'sidebar.reservations',
     icon: <MailIcon />,
     to: ROUTES.RESERVATIONS,
   },
   {
     key: 'vehiculos',
-    label: 'Vehículos',
+    localeKey: 'sidebar.vehicles',
     icon: <DirectionsCarIcon />,
     to: ROUTES.VEHICLES ?? '/vehicles',
   },
   {
     key: 'reportes',
-    label: 'Reportes',
+    localeKey: 'sidebar.reports',
     icon: <ReceiptLongIcon />,
     to: ROUTES.REPORTS ?? '/reports',
   },
   {
     key: 'clientes',
-    label: 'Clientes',
+    localeKey: 'sidebar.customers',
     icon: <PeopleAltIcon />,
     to: ROUTES.CLIENTS ?? '/clients',
   },
@@ -74,10 +80,10 @@ export default function Sidebar({
   open = false,
   onClose,
 }: Props) {
+  const {t} = useTranslation();
   const api = useApi();
   const navigate = useNavigate();
 
-  // Estado colapsado SOLO aplica a 'permanent'
   const [collapsed, setCollapsed] = React.useState<boolean>(() => {
     try {
       return JSON.parse(localStorage.getItem('sidebar:collapsed') || 'false');
@@ -132,11 +138,15 @@ export default function Sidebar({
       {variant === 'permanent' ? (
         <List sx={{px: collapsed ? 0 : 1}}>
           <Tooltip
-            title={collapsed ? 'Expandir menú' : 'Colapsar menú'}
+            title={
+              collapsed ? t('sidebar.expandMenu') : t('sidebar.collapseMenu')
+            }
             placement={collapsed ? 'right' : 'bottom'}>
             <ListItemButton
               onClick={toggleCollapsed}
-              aria-label={collapsed ? 'Expandir menú' : 'Colapsar menú'}
+              aria-label={
+                collapsed ? t('sidebar.expandMenu') : t('sidebar.collapseMenu')
+              }
               aria-expanded={!collapsed}
               sx={{
                 mb: 0.5,
@@ -148,13 +158,9 @@ export default function Sidebar({
               }}>
               {/* Izquierda: icono + título (solo cuando NO está colapsado) */}
               {!collapsed && (
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}>
+                <Box sx={{display: 'flex', alignItems: 'center'}}>
                   <DirectionsCarIcon sx={{mr: 1}} />
-                  <ListItemText primary="Rent Car" />
+                  <ListItemText primary={t('appName')} />
                 </Box>
               )}
 
@@ -181,27 +187,26 @@ export default function Sidebar({
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-            }}>
+          <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
             <DirectionsCarIcon />
             <Typography variant="subtitle1" fontWeight={600}>
-              Rent Car
+              {t('appName')}
             </Typography>
           </Box>
-          <IconButton aria-label="Cerrar menú" onClick={onClose}>
+          <IconButton aria-label={t('sidebar.closeMenu')} onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
       )}
+
       <Divider />
+
       {/* Navegación */}
       <List sx={{px: variant === 'permanent' && collapsed ? 0 : 1}}>
         {NAV_ITEMS.map(item => {
           const selected = active === item.key;
+          const label = t(item.localeKey);
+
           const content = (
             <ListItemButton
               key={item.key}
@@ -235,14 +240,15 @@ export default function Sidebar({
                 }}>
                 {item.icon}
               </ListItemIcon>
+
               {!(variant === 'permanent' && collapsed) && (
-                <ListItemText primary={item.label} />
+                <ListItemText primary={label} />
               )}
             </ListItemButton>
           );
 
           return variant === 'permanent' && collapsed ? (
-            <Tooltip key={item.key} title={item.label} placement="right">
+            <Tooltip key={item.key} title={label} placement="right">
               <span>{content}</span>
             </Tooltip>
           ) : (
@@ -250,11 +256,13 @@ export default function Sidebar({
           );
         })}
       </List>
+
       <Box sx={{mt: 'auto'}} />
+
       {/* Footer / Logout */}
       <Box sx={{px: variant === 'permanent' && collapsed ? 1 : 2, pb: 1}}>
         {variant === 'permanent' && collapsed ? (
-          <Tooltip title="Cerrar sesión" placement="right">
+          <Tooltip title={t('sidebar.logout')} placement="right">
             <IconButton
               color="primary"
               onClick={logout}
@@ -269,14 +277,13 @@ export default function Sidebar({
             fullWidth
             onClick={logout}
             sx={{fontWeight: 600}}>
-            Cerrar sesión
+            {t('sidebar.logout')}
           </Button>
         )}
       </Box>
     </Paper>
   );
 
-  // Overlay (encima de todo)
   if (variant === 'temporary') {
     return (
       <Drawer
@@ -289,6 +296,5 @@ export default function Sidebar({
     );
   }
 
-  // Permanente (en columna)
   return Content;
 }

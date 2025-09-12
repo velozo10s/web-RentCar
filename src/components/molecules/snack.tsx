@@ -1,14 +1,6 @@
 import * as React from 'react';
-import {Snackbar, Alert, type AlertColor, Button, Slide} from '@mui/material';
+import {Snackbar, Alert, Button} from '@mui/material';
 import type {SnackbarProps} from '../../lib/types/snackbar';
-
-// Map your RN variants to MUI severities
-const VARIANT_MAP: Record<NonNullable<SnackbarProps['variant']>, AlertColor> = {
-  info: 'info',
-  success: 'success',
-  warning: 'warning',
-  danger: 'error',
-};
 
 export default function MainSnackbar({
   message,
@@ -20,42 +12,37 @@ export default function MainSnackbar({
   action,
   variant = 'info',
 }: SnackbarProps) {
-  const severity = VARIANT_MAP[variant];
+  const severity = variant === 'danger' ? 'error' : variant;
 
   const handleClose = (_?: unknown, reason?: string) => {
-    // ignore "clickaway" like MUI recommends
     if (reason === 'clickaway') return;
     onDismiss?.();
   };
-
-  const handleAction = React.useCallback(() => {
-    action?.onPress?.();
-    onDismiss?.();
-  }, [action, onDismiss]);
 
   return (
     <Snackbar
       open={isVisible}
       onClose={handleClose}
       autoHideDuration={duration}
-      // Change `horizontal: 'right'` to 'left' if you want top-left
-      anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-      TransitionComponent={props => <Slide {...props} direction="down" />}>
+      anchorOrigin={{vertical: 'top', horizontal: 'right'}} // change to 'left' if you prefer
+    >
       <Alert
-        severity={severity}
+        severity={severity as any}
         variant="filled"
-        // Close icon (optional)
         onClose={showCloseIcon ? () => onDismiss?.() : undefined}
         sx={{
           alignItems: 'center',
-          borderLeftWidth: 4,
-          borderLeftStyle: 'solid',
-          borderLeftColor: t => t.palette[severity].main, // stripe like your RN version
-          ...style, // allow external overrides
+          ...style,
         }}
         action={
           action ? (
-            <Button color="inherit" size="small" onClick={handleAction}>
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => {
+                action.onPress();
+                onDismiss?.();
+              }}>
               {action.label}
             </Button>
           ) : undefined

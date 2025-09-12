@@ -19,6 +19,7 @@ import useApi from '../lib/hooks/useApi';
 import {useStore} from '../lib/hooks/useStore';
 import {ROUTES} from '../routes/routes.ts';
 import LanguageSwitcher from '../components/organisms/LanguageSwitcher.tsx';
+import i18n from 'i18next';
 
 type LoginValues = {
   user: string;
@@ -72,8 +73,13 @@ export default function LoginPage() {
     setLoading(true);
     api.login(data).handle({
       onSuccess: res => {
-        console.log('res ===>', res);
         rootStore.userStore.setAuth(res);
+        rootStore.uiStore.showSnackbar(
+          i18n.t('snackBarMessages.loginSuccess', {
+            username: rootStore.userStore.user?.username,
+          }),
+          'success',
+        );
       },
       successMessage: t('snackBarMessages.loginSuccess'),
       //errorMessage: t('snackBarMessages.loginError'),

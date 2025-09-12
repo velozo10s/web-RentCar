@@ -19,33 +19,31 @@ import {
   LinearProgress,
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
 import StatusChip from '../../components/StatusChip';
 import type {Reservation} from '../../lib/types/reservations';
 import useApi from '../../lib/hooks/useApi';
 import AppShell from '../../components/AppShell.tsx';
-//import {useStore} from '../../lib/hooks/useStore';
 import {useCallback, useEffect, useState} from 'react';
-
-const STATUS_OPTIONS = [
-  {value: 'all', label: 'Todos'},
-  {value: 'pending', label: 'Pendiente'},
-  {value: 'confirmed', label: 'Confirmada'},
-  {value: 'active', label: 'En curso'},
-  {value: 'completed', label: 'Finalizada'},
-  {value: 'declined', label: 'Rechazada'},
-  {value: 'cancelled', label: 'Cancelada'},
-] as const;
-
-type StatusFilter = (typeof STATUS_OPTIONS)[number]['value'];
+import {useTranslation} from 'react-i18next';
 
 export default function ReservationsPage() {
   const api = useApi();
-  //const rootStore = useStore();
   const navigate = useNavigate();
+  const {t} = useTranslation();
 
   const [rows, setRows] = useState<Reservation[]>([]);
   const [query, setQuery] = useState('');
+  const STATUS_OPTIONS = [
+    {value: 'all', label: t('reservations.status.all')},
+    {value: 'pending', label: t('reservations.status.pending')},
+    {value: 'confirmed', label: t('reservations.status.confirmed')},
+    {value: 'active', label: t('reservations.status.active')},
+    {value: 'completed', label: t('reservations.status.completed')},
+    {value: 'declined', label: t('reservations.status.declined')},
+    {value: 'cancelled', label: t('reservations.status.cancelled')},
+  ];
+  type StatusFilter = (typeof STATUS_OPTIONS)[number]['value'];
+
   const [status, setStatus] = useState<StatusFilter>('all');
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -62,8 +60,6 @@ export default function ReservationsPage() {
         onError: () => {
           setLoading(false);
           setRefreshing(false);
-          // @ts-ignore
-          //rootStore.uiStore?.showSnackbar?.('Error al cargar reservas', 'danger');
         },
         onFinally: () => {
           setLoading(false);
@@ -98,7 +94,7 @@ export default function ReservationsPage() {
           flexDirection: 'column',
         }}>
         <Typography variant="h6" mb={2} textAlign="center">
-          Reservas
+          {t('reservations.title')}
         </Typography>
 
         {/* Toolbar */}
@@ -107,7 +103,9 @@ export default function ReservationsPage() {
           gap={1.5}
           alignItems={{xs: 'stretch', sm: 'center'}}
           mb={2}>
-          <FormHelperText sx={{m: 0, mr: 1}}>Estado</FormHelperText>
+          <FormHelperText sx={{m: 0, mr: 1}}>
+            {t('reservations.filters.status')}
+          </FormHelperText>
 
           <FormControl size="small" sx={{width: 220}}>
             <Select
@@ -126,7 +124,7 @@ export default function ReservationsPage() {
           {/* Que el buscador pueda expandirse */}
           <TextField
             size="small"
-            placeholder="Buscar"
+            placeholder={t('reservations.filters.searchPlaceholder')}
             value={query}
             onChange={e => setQuery(e.target.value)}
             sx={{width: {xs: '100%', sm: 300}, flexShrink: 0}}
@@ -138,7 +136,9 @@ export default function ReservationsPage() {
               setRefreshing(true);
               fetchReservations({silent: true});
             }}>
-            {refreshing ? 'Actualizando…' : 'Actualizar'}
+            {refreshing
+              ? t('reservations.filters.refreshing')
+              : t('reservations.filters.refresh')}
           </Button>
         </Stack>
 
@@ -154,13 +154,21 @@ export default function ReservationsPage() {
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Cliente</TableCell>
-                  <TableCell>Ítems</TableCell>
-                  <TableCell>Fecha desde/Hasta</TableCell>
-                  <TableCell>Total</TableCell>
-                  <TableCell>Estado</TableCell>
-                  <TableCell align="center">Acciones</TableCell>
+                  <TableCell>{t('reservations.table.columns.id')}</TableCell>
+                  <TableCell>
+                    {t('reservations.table.columns.customer')}
+                  </TableCell>
+                  <TableCell>{t('reservations.table.columns.items')}</TableCell>
+                  <TableCell>
+                    {t('reservations.table.columns.dateRange')}
+                  </TableCell>
+                  <TableCell>{t('reservations.table.columns.total')}</TableCell>
+                  <TableCell>
+                    {t('reservations.table.columns.status')}
+                  </TableCell>
+                  <TableCell align="center">
+                    {t('reservations.table.columns.actions')}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -170,11 +178,12 @@ export default function ReservationsPage() {
                     <TableCell>{row.document_number}</TableCell>
                     <TableCell>
                       {row.items?.length
-                        ? `${row.items.length} vehículo(s) · ${row.items.map(i => i.vehicle_id).join(', ')}`
+                        ? `${row.items.length} ${t('reservations.table.itemsPlural')} · ${row.items.map(i => i.vehicle_id).join(', ')}`
                         : '—'}
                     </TableCell>
                     <TableCell>
-                      {formatDate(row.start_at)}&nbsp;hasta&nbsp;
+                      {formatDate(row.start_at)}&nbsp;
+                      {t('reservations.table.columns.to')}&nbsp;
                       {formatDate(row.end_at)}
                     </TableCell>
                     <TableCell>
@@ -190,7 +199,7 @@ export default function ReservationsPage() {
                       <Button
                         size="small"
                         onClick={() => navigate(`/reservations/${row.id}`)}>
-                        Ver detalle
+                        {t('reservations.actions.viewDetail')}
                       </Button>
                     </TableCell>
                   </TableRow>

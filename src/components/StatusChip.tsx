@@ -1,24 +1,46 @@
 import * as React from 'react';
-import { Chip } from '@mui/material';
+import {Chip, type ChipProps} from '@mui/material';
+import {useTranslation} from 'react-i18next';
 
-const LABELS: Record<string, string> = {
-  pending: 'Pendiente',
-  confirmed: 'Confirmada',
-  active: 'En curso',
-  completed: 'Finalizada',
-  declined: 'Rechazada',
-  cancelled: 'Cancelada',
+type Status =
+  | 'pending'
+  | 'confirmed'
+  | 'active'
+  | 'completed'
+  | 'declined'
+  | 'cancelled';
+
+const STATUS_COLOR: Record<Status, ChipProps['color']> = {
+  pending: 'warning',
+  confirmed: 'success',
+  active: 'info',
+  completed: 'default',
+  declined: 'error',
+  cancelled: 'error',
 };
 
-export default function StatusChip({ status }: { status: string }) {
-  const key = (status || '').toLowerCase();
+const STATUS_LOCALE_KEY: Record<Status, string> = {
+  pending: 'reservations.status.pending',
+  confirmed: 'reservations.status.confirmed',
+  active: 'reservations.status.active',
+  completed: 'reservations.status.completed',
+  declined: 'reservations.status.declined',
+  cancelled: 'reservations.status.cancelled',
+};
 
-  const color =
-    key === 'confirmed' ? 'success' :
-      key === 'active' ? 'info' :
-        key === 'completed' ? 'default' :
-          key === 'declined' || key === 'cancelled' ? 'error' :
-            'warning';
+function normalizeStatus(value: string): Status | undefined {
+  const key = (value || '').toLowerCase() as Status;
+  return (Object.keys(STATUS_LOCALE_KEY) as Status[]).includes(key)
+    ? key
+    : undefined;
+}
 
-  return <Chip size="small" color={color as any} label={LABELS[key] ?? status} />;
+export default function StatusChip({status}: {status: string}) {
+  const {t} = useTranslation();
+  const norm = normalizeStatus(status);
+
+  const label = norm ? t(STATUS_LOCALE_KEY[norm]) : status;
+  const color: ChipProps['color'] = norm ? STATUS_COLOR[norm] : 'default';
+
+  return <Chip size="small" color={color} label={label} />;
 }

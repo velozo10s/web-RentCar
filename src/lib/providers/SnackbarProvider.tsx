@@ -11,13 +11,15 @@ export const SnackbarProvider = observer(
     return (
       <>
         {children}
-        <MainSnackbar
-          isVisible={isVisible}
-          message={message}
-          variant={variant}
-          duration={duration}
-          onDismiss={() => uiStore.hideSnackbar()}
-        />
+        {isVisible && (
+          <MainSnackbar
+            isVisible
+            message={message}
+            variant={variant}
+            duration={duration}
+            onDismiss={() => uiStore.hideSnackbar()}
+          />
+        )}
       </>
     );
   },
