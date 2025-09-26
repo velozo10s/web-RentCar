@@ -21,14 +21,22 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import MailIcon from '@mui/icons-material/Mail';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
+import BadgeIcon from '@mui/icons-material/Badge';
 import {useTranslation} from 'react-i18next';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import useApi from '../lib/hooks/useApi';
 import rootStore from '../lib/stores/rootStore';
 import {ROUTES} from '../routes/routes';
+import {useState} from 'react';
 
 type Props = {
-  active?: 'inicio' | 'reservas' | 'vehiculos' | 'reportes' | 'clientes';
+  active?:
+    | 'dashboard'
+    | 'reservations'
+    | 'vehicles'
+    | 'reports'
+    | 'customers'
+    | 'employees';
   variant?: 'permanent' | 'temporary';
   open?: boolean;
   onClose?: () => void;
@@ -43,48 +51,58 @@ type NavItem = {
 
 const NAV_ITEMS: readonly NavItem[] = [
   {
-    key: 'inicio',
+    key: 'dashboard',
     localeKey: 'sidebar.home',
     icon: <DashboardIcon />,
     to: ROUTES.HOME ?? '/',
   },
   {
-    key: 'reservas',
+    key: 'reservations',
     localeKey: 'sidebar.reservations',
     icon: <MailIcon />,
     to: ROUTES.RESERVATIONS,
   },
   {
-    key: 'vehiculos',
+    key: 'vehicles',
     localeKey: 'sidebar.vehicles',
     icon: <DirectionsCarIcon />,
     to: ROUTES.VEHICLES ?? '/vehicles',
   },
   {
-    key: 'reportes',
+    key: 'reports',
     localeKey: 'sidebar.reports',
     icon: <ReceiptLongIcon />,
     to: ROUTES.REPORTS ?? '/reports',
   },
   {
-    key: 'clientes',
+    key: 'customers',
     localeKey: 'sidebar.customers',
     icon: <PeopleAltIcon />,
     to: ROUTES.CLIENTS ?? '/clients',
   },
+  {
+    key: 'employees',
+    localeKey: 'sidebar.employees',
+    icon: <BadgeIcon />,
+    to: ROUTES.EMPLOYEES,
+  },
 ] as const;
 
 export default function Sidebar({
-  active = 'reservas',
   variant = 'permanent',
   open = false,
   onClose,
 }: Props) {
+  const {pathname} = useLocation();
+  const isSelected = (to: string) => {
+    if (to === '/') return pathname === '/';
+    return pathname === to || pathname.startsWith(to + '/');
+  };
   const {t} = useTranslation();
   const api = useApi();
   const navigate = useNavigate();
 
-  const [collapsed, setCollapsed] = React.useState<boolean>(() => {
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
     try {
       return JSON.parse(localStorage.getItem('sidebar:collapsed') || 'false');
     } catch {
@@ -204,7 +222,7 @@ export default function Sidebar({
       {/* Navegación */}
       <List sx={{px: variant === 'permanent' && collapsed ? 0 : 1}}>
         {NAV_ITEMS.map(item => {
-          const selected = active === item.key;
+          const selected = isSelected(item.to);
           const label = t(item.localeKey);
 
           const content = (

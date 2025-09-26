@@ -19,18 +19,18 @@ import {
 } from '@mui/material';
 import {useParams, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import StatusChip from '../../components/StatusChip';
-import type {Reservation} from '../../lib/types/reservations';
-import useApi from '../../lib/hooks/useApi';
-import {useStore} from '../../lib/hooks/useStore';
+import StatusChip from '../../../components/StatusChip.tsx';
+import type {Reservation} from '../../../lib/types/reservations.ts';
+import useApi from '../../../lib/hooks/useApi.ts';
+import {useStore} from '../../../lib/hooks/useStore.ts';
 import {
   confirmReservation,
   declineReservation,
   activateReservation,
   completeReservation,
-} from '../../api/endpoints.ts';
+} from '../../../api/endpoints.ts';
 import {useCallback, useEffect, useState} from 'react';
-import AppShell from '../../components/AppShell.tsx';
+import AppShell from '../../../components/AppShell.tsx';
 
 export default function ReservationDetailPage() {
   const {t, i18n} = useTranslation();

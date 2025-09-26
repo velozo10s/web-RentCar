@@ -19,14 +19,14 @@ import {
   LinearProgress,
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
-import StatusChip from '../../components/StatusChip';
-import type {Reservation} from '../../lib/types/reservations';
-import useApi from '../../lib/hooks/useApi';
-import AppShell from '../../components/AppShell.tsx';
+import StatusChip from '../../../components/StatusChip.tsx';
+import type {Reservation} from '../../../lib/types/reservations.ts';
+import useApi from '../../../lib/hooks/useApi.ts';
+import AppShell from '../../../components/AppShell.tsx';
 import {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
-export default function ReservationsPage() {
+export default function EmployeesPage() {
   const api = useApi();
   const navigate = useNavigate();
   const {t} = useTranslation();
@@ -94,7 +94,7 @@ export default function ReservationsPage() {
           flexDirection: 'column',
         }}>
         <Typography variant="h6" mb={2} textAlign="center">
-          {t('reservations.title')}
+          {t('employees.title')}
         </Typography>
 
         {/* Toolbar */}

@@ -6,8 +6,9 @@ import {ROUTES} from '../routes/routes';
 import LoginScreen from '../pages/LoginScreen';
 import {StoreContext} from '../main';
 import {CssBaseline, ThemeProvider} from '@mui/material';
-import ReservationsPage from './reservations/ReservationsPage';
-import ReservationDetailPage from './reservations/reservationDetailPage';
+import ReservationsPage from './sideBar/reservations/ReservationsPage';
+import ReservationDetailPage from './sideBar/reservations/reservationDetailPage';
+import EmployeesPage from './sideBar/employees/EmployeesPage.tsx';
 import HomeScreen from './HomeScreen.tsx';
 import {darkTheme} from '../themes/dark.ts';
 import {observer} from 'mobx-react-lite';
@@ -57,6 +58,7 @@ const App = observer(function App() {
             path={ROUTES.RESERVATION}
             element={<ReservationDetailPage />}
           />
+          <Route path={ROUTES.EMPLOYEES} element={<EmployeesPage />} />
         </Route>
 
         {/* Catch-all */}

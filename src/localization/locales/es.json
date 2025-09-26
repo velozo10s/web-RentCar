@@ -198,6 +198,7 @@
   "vehicles": "Vehículos",
   "reports": "Reportes",
   "customers": "Clientes",
+  "employees": "Empleados",
   "logout": "Cerrar sesión",
   "expandMenu": "Expandir menú",
   "collapseMenu": "Colapsar menú",
@@ -251,7 +252,7 @@
     "dateRange": "Desde/Hasta",
     "to": "hasta",
     "total": "Total",
-    "status": "Estadp",
+    "status": "Estado",
     "actions": "Acciones"
    },
    "itemsSingular": "vehiculo",
@@ -268,6 +269,73 @@
    "completed": "Finalizado",
    "declined": "Rechazado",
    "cancelled": "Cancelado"
+  }
+ },
+ "employees": {
+  "title": "Empleados",
+  "detail": {
+   "title": "Reservation detail",
+   "reservation": "Reservation",
+   "currentStatus": "Current status",
+   "customer": "Customer",
+   "fullName": "Full name",
+   "start": "Start",
+   "end": "End",
+   "total": "Total",
+   "note": "Note",
+   "vehicles": "Vehicles",
+   "vehiclesTable": {
+    "columns": {
+     "id": "ID",
+     "brand": "Brand",
+     "model": "Model",
+     "year": "Year",
+     "amount": "Amount"
+    }
+   },
+   "changeStatus": {
+    "title": "Change status",
+    "placeholder": "Select a status",
+    "applying": "Applying…",
+    "notAllowed": "That status cannot be changed here"
+   },
+   "toasts": {
+    "updated": "Status updated",
+    "updateError": "Could not update"
+   }
+  },
+  "filters": {
+   "status": "Status",
+   "all": "All",
+   "searchPlaceholder": "Search",
+   "refresh": "Refresh",
+   "refreshing": "Refreshing..."
+  },
+  "table": {
+   "columns": {
+    "id": "ID",
+    "customer": "Customer",
+    "items": "Items",
+    "dateRange": "From/To",
+    "to": "to",
+    "total": "Total",
+    "status": "Status",
+    "actions": "Actions"
+   },
+   "itemsSingular": "vehicle",
+   "itemsPlural": "vehicle(s)"
+  },
+  "actions": {
+   "viewDetail": "View detail"
+  },
+  "status": {
+   "all": "All",
+   "pending": "Pending",
+   "confirmed": "Confirmed",
+   "active": "In progress",
+   "completed": "Completed",
+   "declined": "Declined",
+   "cancelled": "Cancelled"
   }
  }
 }
