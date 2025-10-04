@@ -13,7 +13,14 @@
   "any": "All",
   "reset": "Reset",
   "apply": "Apply",
-  "inbox": "Inbox"
+  "inbox": "Inbox",
+  "actions": "Actions",
+  "edit": "Edit",
+  "delete": "Delete",
+  "save": "Save",
+  "refresh": "Refresh",
+  "refreshing": "Refreshing...",
+  "add": "Add"
  },
  "tabNavigator": {
   "home": "Home",
@@ -78,6 +85,7 @@
   "title": "Home Screen"
  },
  "vehicles": {
+  "title": "Vehicles",
   "search": "Search vehicle",
   "viewDetails": "View details",
   "perDay": "/day",
@@ -103,13 +111,27 @@
   },
   "mileage": "mileage",
   "insuranceFee": "Insurance Fee",
+  "vehicleTable": {
+   "columns": {
+    "id": "ID",
+    "brand": "Brand",
+    "type": "Type",
+    "model": "Model",
+    "year": "Year",
+    "plate": "Plate",
+    "transmission": "Transmission",
+    "seats": "Seats",
+    "pricePerDay": "Price/day"
+   }
+  },
   "filters": {
-   "filters": "Filters",
+   "title": "Filters",
    "sortBy": "Sort by",
    "orderAsc": "Asc",
    "orderDesc": "Desc",
    "brand": "Brand",
    "type": "Type",
+   "transmission": "Transmission",
    "dates": "Dates",
    "newest": "Newest",
    "pricePerDay": "Price/day",
@@ -240,9 +262,7 @@
   "filters": {
    "status": "Status",
    "all": "All",
-   "searchPlaceholder": "Search",
-   "refresh": "Refresh",
-   "refreshing": "Refreshing..."
+   "searchPlaceholder": "Search"
   },
   "table": {
    "columns": {
@@ -252,75 +272,7 @@
     "dateRange": "From/To",
     "to": "to",
     "total": "Total",
-    "status": "Status",
-    "actions": "Actions"
-   },
-   "itemsSingular": "vehicle",
-   "itemsPlural": "vehicle(s)"
-  },
-  "actions": {
-   "viewDetail": "View detail"
-  },
-  "status": {
-   "all": "All",
-   "pending": "Pending",
-   "confirmed": "Confirmed",
-   "active": "In progress",
-   "completed": "Completed",
-   "declined": "Declined",
-   "cancelled": "Cancelled"
-  }
- },
- "employees": {
-  "title": "Employees",
-  "detail": {
-   "title": "Reservation detail",
-   "reservation": "Reservation",
-   "currentStatus": "Current status",
-   "customer": "Customer",
-   "fullName": "Full name",
-   "start": "Start",
-   "end": "End",
-   "total": "Total",
-   "note": "Note",
-   "vehicles": "Vehicles",
-   "vehiclesTable": {
-    "columns": {
-     "id": "ID",
-     "brand": "Brand",
-     "model": "Model",
-     "year": "Year",
-     "amount": "Amount"
-    }
-   },
-   "changeStatus": {
-    "title": "Change status",
-    "placeholder": "Select a status",
-    "applying": "Applying…",
-    "notAllowed": "That status cannot be changed here"
-   },
-   "toasts": {
-    "updated": "Status updated",
-    "updateError": "Could not update"
-   }
-  },
-  "filters": {
-   "status": "Status",
-   "all": "All",
-   "searchPlaceholder": "Search",
-   "refresh": "Refresh",
-   "refreshing": "Refreshing..."
-  },
-  "table": {
-   "columns": {
-    "id": "ID",
-    "customer": "Customer",
-    "items": "Items",
-    "dateRange": "From/To",
-    "to": "to",
-    "total": "Total",
-    "status": "Status",
-    "actions": "Actions"
+    "status": "Status"
    },
    "itemsSingular": "vehicle",
    "itemsPlural": "vehicle(s)"

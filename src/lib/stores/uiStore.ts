@@ -17,7 +17,6 @@ export class UIStore {
     variant: UIStore['snackbar']['variant'],
     duration?: number,
   ) {
-    console.log('Llega hasta aqui');
     this.snackbar = {
       isVisible: true,
       message,

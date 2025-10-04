@@ -10,7 +10,7 @@ export const ROUTES = {
   HOME: '/dashboard',
   VEHICLES: '/vehicles',
   REPORTS: '/reports',
-  CLIENTS: '/clients',
+  CUSTOMERS: '/customers',
   EMPLOYEES: '/employees',
   // ADMIN_PROPERTIES: "/admin/properties",
   // ADMIN_CONSTRUCTIONS: "/admin/constructions",

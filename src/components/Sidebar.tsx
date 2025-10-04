@@ -78,7 +78,7 @@ const NAV_ITEMS: readonly NavItem[] = [
     key: 'customers',
     localeKey: 'sidebar.customers',
     icon: <PeopleAltIcon />,
-    to: ROUTES.CLIENTS ?? '/clients',
+    to: ROUTES.CUSTOMERS ?? '/customers',
   },
   {
     key: 'employees',

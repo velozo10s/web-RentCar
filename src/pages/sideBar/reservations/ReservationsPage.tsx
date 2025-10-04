@@ -136,9 +136,7 @@ export default function ReservationsPage() {
               setRefreshing(true);
               fetchReservations({silent: true});
             }}>
-            {refreshing
-              ? t('reservations.filters.refreshing')
-              : t('reservations.filters.refresh')}
+            {refreshing ? t('common.refresh.refreshing') : t('common.refresh')}
           </Button>
         </Stack>
 
@@ -166,9 +164,7 @@ export default function ReservationsPage() {
                   <TableCell>
                     {t('reservations.table.columns.status')}
                   </TableCell>
-                  <TableCell align="center">
-                    {t('reservations.table.columns.actions')}
-                  </TableCell>
+                  <TableCell align="center">{t('common.actions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

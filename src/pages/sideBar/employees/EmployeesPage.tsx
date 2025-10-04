@@ -137,8 +137,8 @@ export default function EmployeesPage() {
               fetchReservations({silent: true});
             }}>
             {refreshing
-              ? t('reservations.filters.refreshing')
-              : t('reservations.filters.refresh')}
+              ? t('common.refresh.refreshing')
+              : t('common.refresh.refresh')}
           </Button>
         </Stack>
 
@@ -166,9 +166,7 @@ export default function EmployeesPage() {
                   <TableCell>
                     {t('reservations.table.columns.status')}
                   </TableCell>
-                  <TableCell align="center">
-                    {t('reservations.table.columns.actions')}
-                  </TableCell>
+                  <TableCell align="center">{t('common.actions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

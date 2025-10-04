@@ -9,9 +9,11 @@ import {CssBaseline, ThemeProvider} from '@mui/material';
 import ReservationsPage from './sideBar/reservations/ReservationsPage';
 import ReservationDetailPage from './sideBar/reservations/reservationDetailPage';
 import EmployeesPage from './sideBar/employees/EmployeesPage.tsx';
+import CustomersPage from './sideBar/customers/CustomersPage';
 import HomeScreen from './HomeScreen.tsx';
 import {darkTheme} from '../themes/dark.ts';
 import {observer} from 'mobx-react-lite';
+import VehiclesPage from './sideBar/vehicles/VehiclesPage.tsx';
 
 // Guard: requiere sesión
 const RequireAuth = observer(function RequireAuth() {
@@ -59,6 +61,8 @@ const App = observer(function App() {
             element={<ReservationDetailPage />}
           />
           <Route path={ROUTES.EMPLOYEES} element={<EmployeesPage />} />
+          <Route path={ROUTES.CUSTOMERS} element={<CustomersPage />} />
+          <Route path={ROUTES.VEHICLES} element={<VehiclesPage />} />
         </Route>
 
         {/* Catch-all */}
