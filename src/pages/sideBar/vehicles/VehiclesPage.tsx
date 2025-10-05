@@ -22,10 +22,11 @@ import {
 } from '@mui/material';
 import AppShell from '../../../components/AppShell';
 import useApi from '../../../lib/hooks/useApi';
-import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useStore} from '../../../lib/hooks/useStore';
 import AddVehicleDialog from '../../../components/molecules/AddVehicleDialog.tsx';
+import {useCallback, useEffect, useState} from 'react';
+import EditVehicleDialog from '../../../components/molecules/EditVehicleDialog.tsx';
 
 type Vehicle = {
   id: number;
@@ -48,46 +49,47 @@ type VType = {id: number; name: string};
 
 export default function VehiclesPage() {
   const api = useApi();
-  const navigate = useNavigate();
   const {t} = useTranslation();
   const {uiStore} = useStore();
 
-  const [rows, setRows] = React.useState<Vehicle[]>([]);
-  const [brands, setBrands] = React.useState<Brand[]>([]);
-  const [types, setTypes] = React.useState<VType[]>([]);
-  const [metaLoading, setMetaLoading] = React.useState(false);
+  const [rows, setRows] = useState<Vehicle[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [types, setTypes] = useState<VType[]>([]);
+  const [metaLoading, setMetaLoading] = useState(false);
 
   // Filtros
-  const [query, setQuery] = React.useState('');
-  const [brand, setBrand] = React.useState<'all' | number>('all');
-  const [vtype, setVtype] = React.useState<'all' | number>('all');
-  const [transmission, setTransmission] = React.useState<
+  const [query, setQuery] = useState('');
+  const [brand, setBrand] = useState<'all' | number>('all');
+  const [vtype, setVtype] = useState<'all' | number>('all');
+  const [transmission, setTransmission] = useState<
     'all' | 'manual' | 'automatic'
   >('all');
 
   // Estados de lista
-  const [loading, setLoading] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   // Dialog
-  const [addOpen, setAddOpen] = React.useState(false);
+  const [addOpen, setAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
 
   // Toggle active
-  const [togglingId, setTogglingId] = React.useState<number | null>(null);
+  const [togglingId, setTogglingId] = useState<number | null>(null);
 
   // Helpers para mostrar nombre por id
-  const brandName = React.useCallback(
+  const brandName = useCallback(
     (id?: number) =>
       brands.find(b => b.id === id)?.name ?? (id ? `#${id}` : '—'),
     [brands],
   );
-  const typeName = React.useCallback(
+  const typeName = useCallback(
     (id?: number) =>
       types.find(t => t.id === id)?.name ?? (id ? `#${id}` : '—'),
     [types],
   );
 
-  const fetchVehicles = React.useCallback(
+  const fetchVehicles = useCallback(
     (opts?: {silent?: boolean}) => {
       if (!opts?.silent) setLoading(true);
       api.listVehicles({}).handle({
@@ -105,7 +107,7 @@ export default function VehiclesPage() {
     [api],
   );
 
-  const fetchMeta = React.useCallback(() => {
+  const fetchMeta = useCallback(() => {
     setMetaLoading(true);
     api.getVehicleBrands().handle({
       onSuccess: (res: Brand[]) => setBrands(res ?? []),
@@ -116,7 +118,7 @@ export default function VehiclesPage() {
     });
   }, [api]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchMeta();
     fetchVehicles();
   }, [fetchMeta, fetchVehicles]);
@@ -344,9 +346,10 @@ export default function VehiclesPage() {
                         <Stack direction="row" gap={1} justifyContent="center">
                           <Button
                             size="small"
-                            onClick={() =>
-                              navigate(`/vehicles/${row.id}/edit`)
-                            }>
+                            onClick={() => {
+                              setEditId(row.id);
+                              setEditOpen(true);
+                            }}>
                             {t('common.edit') || 'Edit'}
                           </Button>
 
@@ -404,6 +407,20 @@ export default function VehiclesPage() {
           brands={brands}
           types={types}
         />
+
+        {editOpen && editId != null && (
+          <EditVehicleDialog
+            open={editOpen}
+            onClose={() => setEditOpen(false)}
+            onSaved={() => {
+              setEditOpen(false);
+              fetchVehicles({silent: true});
+            }}
+            vehicleId={editId}
+            brands={brands}
+            types={types}
+          />
+        )}
       </Box>
     </AppShell>
   );

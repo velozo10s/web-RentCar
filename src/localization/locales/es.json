@@ -21,7 +21,7 @@
   "refresh": "Actualizar",
   "refreshing": "Actualizando...",
   "add": "Agregar",
-  "active": "Activo",
+  "active": "Estado",
   "inactive": "Inactivo",
   "activate": "Activar",
   "deactivate": "Desactivar",
@@ -94,6 +94,7 @@
  "vehicles": {
   "title": "Vehiculos",
   "add": "Agregar Vehiculo",
+  "edit": "Editar Vehiculo",
   "search": "Buscar vehiculo",
   "viewDetails": "Ver detalles",
   "perDay": "/dia",
@@ -152,7 +153,9 @@
   },
   "images": {
    "filesSelected_one": "{{count}} archivo seleccionado",
-   "filesSelected_other": "{{count}} archivos seleccionados"
+   "filesSelected_other": "{{count}} archivos seleccionados",
+   "current": "Imagenes vigentes",
+   "primary": "Imagen principal"
   },
   "filters": {
    "title": "Filtros",
