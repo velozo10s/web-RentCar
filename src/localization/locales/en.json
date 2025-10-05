@@ -20,7 +20,14 @@
   "save": "Save",
   "refresh": "Refresh",
   "refreshing": "Refreshing...",
-  "add": "Add"
+  "add": "Add",
+  "active": "Active",
+  "inactive": "Inactive",
+  "activate": "Activate",
+  "deactivate": "Deactivate",
+  "activating": "Activating…",
+  "deactivating": "Deactivating…",
+  "empty": "No data found"
  },
  "tabNavigator": {
   "home": "Home",
@@ -86,6 +93,7 @@
  },
  "vehicles": {
   "title": "Vehicles",
+  "add": "Add Vehicle",
   "search": "Search vehicle",
   "viewDetails": "View details",
   "perDay": "/day",
@@ -94,8 +102,8 @@
   "startDate": "Start date",
   "endDate": "End date",
   "transmission": {
-   "automatic": "automatic",
-   "manual": "manual"
+   "automatic": "Automatic",
+   "manual": "Manual"
   },
   "type": {
    "Sedan": "Sedan",
@@ -123,6 +131,28 @@
     "seats": "Seats",
     "pricePerDay": "Price/day"
    }
+  },
+  "fields": {
+   "brand": "Brand",
+   "type": "Type",
+   "model": "Model",
+   "year": "Year",
+   "license_plate": "Plate",
+   "transmission": "Transmission",
+   "seats": "Seats",
+   "price_per_day": "Price/day (USD)",
+   "price_per_hour": "Price/hour (USD)",
+   "color": "Color",
+   "vin": "VIN",
+   "mileage": "Mileage",
+   "maintenance_mileage": "Maint. mileage",
+   "insurance_fee": "Insurance fee",
+   "fuel_capacity": "Fuel capacity",
+   "fuel_type": "Fuel type"
+  },
+  "images": {
+   "filesSelected_one": "{{count}} file selected",
+   "filesSelected_other": "{{count}} files selected"
   },
   "filters": {
    "title": "Filters",

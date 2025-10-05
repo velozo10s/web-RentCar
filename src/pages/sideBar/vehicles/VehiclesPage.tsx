@@ -1,4 +1,3 @@
-// src/pages/vehicles/VehiclesPage.tsx
 import * as React from 'react';
 import {
   Box,
@@ -18,17 +17,15 @@ import {
   FormControl,
   FormHelperText,
   LinearProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   InputLabel,
+  Chip,
 } from '@mui/material';
 import AppShell from '../../../components/AppShell';
 import useApi from '../../../lib/hooks/useApi';
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {useStore} from '../../../lib/hooks/useStore';
+import AddVehicleDialog from '../../../components/molecules/AddVehicleDialog.tsx';
 
 type Vehicle = {
   id: number;
@@ -38,11 +35,12 @@ type Vehicle = {
   year: number;
   license_plate: string;
   transmission: 'manual' | 'automatic' | string;
-  seats: number;
+  seats: number; // ya no se muestra en tabla, pero lo dejo en el tipo por si lo usas en otros lados
   price_per_day: number;
   price_per_hour?: number;
   vin?: string;
   color?: string;
+  is_active: boolean; // 👈 nuevo
 };
 
 type Brand = {id: number; name: string};
@@ -71,9 +69,11 @@ export default function VehiclesPage() {
   const [loading, setLoading] = React.useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  // Add dialog
+  // Dialog
   const [addOpen, setAddOpen] = React.useState(false);
-  const [deletingId, setDeletingId] = React.useState<number | null>(null);
+
+  // Toggle active
+  const [togglingId, setTogglingId] = React.useState<number | null>(null);
 
   // Helpers para mostrar nombre por id
   const brandName = React.useCallback(
@@ -134,12 +134,15 @@ export default function VehiclesPage() {
     return !(transmission !== 'all' && r.transmission !== transmission);
   });
 
-  const handleDelete = (id: number) => {
-    setDeletingId(id);
-    api.deleteVehicle(id).handle({
+  const handleToggleActive = (id: number, nextActive: boolean) => {
+    setTogglingId(id);
+    // Ajusta esta llamada a tu API real si difiere
+    api.updateVehicle(id, {is_active: nextActive}).handle({
       onSuccess: () => {
         uiStore?.showSnackbar?.(
-          t('vehicles.feedback.deleted') || 'Vehicle deleted',
+          nextActive
+            ? t('vehicles.feedback.activated') || 'Vehicle activated'
+            : t('vehicles.feedback.deactivated') || 'Vehicle deactivated',
           'success',
         );
         fetchVehicles({silent: true});
@@ -147,12 +150,15 @@ export default function VehiclesPage() {
       onError: (err: any) => {
         uiStore?.showSnackbar?.(
           err?.response?.data?.error ||
-            (t('vehicles.feedback.deleteError') as any) ||
-            'Delete failed',
+            (nextActive
+              ? (t('vehicles.feedback.activateError') as any) ||
+                'Activate failed'
+              : (t('vehicles.feedback.deactivateError') as any) ||
+                'Deactivate failed'),
           'danger',
         );
       },
-      onFinally: () => setDeletingId(null),
+      onFinally: () => setTogglingId(null),
     });
   };
 
@@ -291,9 +297,8 @@ export default function VehiclesPage() {
                   <TableCell>
                     {t('vehicles.vehicleTable.columns.transmission')}
                   </TableCell>
-                  <TableCell>
-                    {t('vehicles.vehicleTable.columns.seats')}
-                  </TableCell>
+                  {/* Nueva columna: Active */}
+                  <TableCell>{t('common.active') || 'Active'}</TableCell>
                   <TableCell>
                     {t('vehicles.vehicleTable.columns.pricePerDay')}
                   </TableCell>
@@ -303,44 +308,75 @@ export default function VehiclesPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filtered.map(row => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{brandName(row.brand_id)}</TableCell>
-                    <TableCell>{typeName(row.type_id)}</TableCell>
-                    <TableCell>{row.model}</TableCell>
-                    <TableCell>{row.year}</TableCell>
-                    <TableCell>{row.license_plate}</TableCell>
-                    <TableCell>
-                      {t(`vehicles.transmission.${row.transmission}`)}
-                    </TableCell>
-                    <TableCell>{row.seats}</TableCell>
-                    <TableCell>
-                      {Number(row.price_per_day).toLocaleString(undefined, {
-                        style: 'currency',
-                        currency: 'USD',
-                      })}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Stack direction="row" gap={1} justifyContent="center">
-                        <Button
+                {filtered.map(row => {
+                  const isActive = row.is_active;
+                  return (
+                    <TableRow key={row.id} hover>
+                      <TableCell>{row.id}</TableCell>
+                      <TableCell>{brandName(row.brand_id)}</TableCell>
+                      <TableCell>{typeName(row.type_id)}</TableCell>
+                      <TableCell>{row.model}</TableCell>
+                      <TableCell>{row.year}</TableCell>
+                      <TableCell>{row.license_plate}</TableCell>
+                      <TableCell>
+                        {t(`vehicles.transmission.${row.transmission}`)}
+                      </TableCell>
+                      {/* Chip Active */}
+                      <TableCell>
+                        <Chip
+                          label={
+                            isActive
+                              ? t('common.active') || 'Active'
+                              : t('common.inactive') || 'Inactive'
+                          }
+                          color={isActive ? 'success' : 'error'}
+                          variant="outlined"
                           size="small"
-                          onClick={() => navigate(`/vehicles/${row.id}/edit`)}>
-                          {t('common.edit') || 'Edit'}
-                        </Button>
-                        <Button
-                          size="small"
-                          color="error"
-                          disabled={deletingId === row.id}
-                          onClick={() => handleDelete(row.id)}>
-                          {deletingId === row.id
-                            ? t('common.deleting') || 'Deleting…'
-                            : t('common.delete') || 'Delete'}
-                        </Button>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {Number(row.price_per_day).toLocaleString(undefined, {
+                          style: 'currency',
+                          currency: 'USD',
+                        })}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Stack direction="row" gap={1} justifyContent="center">
+                          <Button
+                            size="small"
+                            onClick={() =>
+                              navigate(`/vehicles/${row.id}/edit`)
+                            }>
+                            {t('common.edit') || 'Edit'}
+                          </Button>
+
+                          {/* Activar / Desactivar */}
+                          {isActive ? (
+                            <Button
+                              size="small"
+                              variant="contained"
+                              disabled={togglingId === row.id}
+                              onClick={() => handleToggleActive(row.id, false)}>
+                              {togglingId === row.id
+                                ? t('common.deactivating') || 'Deactivating…'
+                                : t('common.deactivate') || 'Deactivate'}
+                            </Button>
+                          ) : (
+                            <Button
+                              size="small"
+                              variant="contained"
+                              disabled={togglingId === row.id}
+                              onClick={() => handleToggleActive(row.id, true)}>
+                              {togglingId === row.id
+                                ? t('common.activating') || 'Activating…'
+                                : t('common.activate') || 'Activate'}
+                            </Button>
+                          )}
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
 
                 {filtered.length === 0 && !loading && (
                   <TableRow>
@@ -348,7 +384,7 @@ export default function VehiclesPage() {
                       colSpan={10}
                       align="center"
                       sx={{py: 6, color: 'text.secondary'}}>
-                      {t('vehicles.empty') || 'No results'}
+                      {t('common.empty') || 'No results'}
                     </TableCell>
                   </TableRow>
                 )}
@@ -370,323 +406,5 @@ export default function VehiclesPage() {
         />
       </Box>
     </AppShell>
-  );
-}
-
-/* -------------------- Add Vehicle Dialog -------------------- */
-
-function AddVehicleDialog({
-  open,
-  onClose,
-  onCreated,
-  brands,
-  types,
-}: {
-  open: boolean;
-  onClose: () => void;
-  onCreated: () => void;
-  brands: Brand[];
-  types: VType[];
-}) {
-  const api = useApi();
-  const {uiStore} = useStore();
-  const {t} = useTranslation();
-  const [submitting, setSubmitting] = React.useState(false);
-
-  const [form, setForm] = React.useState({
-    brand_id: '' as string | number,
-    type_id: '' as string | number,
-    model: '',
-    year: '' as string | number,
-    license_plate: '',
-    transmission: 'automatic',
-    seats: '' as string | number,
-    price_per_day: '' as string | number,
-    price_per_hour: '' as string | number,
-    color: '',
-    vin: '',
-    mileage: '' as string | number,
-    maintenance_mileage: '' as string | number,
-    insurance_fee: '' as string | number,
-    fuel_capacity: '' as string | number,
-    fuel_type: 'petrol',
-    make_primary: true,
-  });
-  const [images, setImages] = React.useState<File[]>([]);
-  const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
-    setForm(prev => ({...prev, [k]: v}));
-
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    setImages(files);
-  };
-
-  const handleSubmit = () => {
-    // Validación rápida de obligatorios mínimos
-    if (
-      !form.brand_id ||
-      !form.type_id ||
-      !form.model ||
-      !form.year ||
-      !form.license_plate
-    ) {
-      uiStore?.showSnackbar?.(
-        t('vehicles.feedback.missingFields') ||
-          'Please complete required fields',
-        'warning',
-      );
-      return;
-    }
-    setSubmitting(true);
-    const fd = new FormData();
-    fd.append('brand_id', String(form.brand_id)); // 👈 envía ID
-    fd.append('type_id', String(form.type_id)); // 👈 envía ID
-    fd.append('model', form.model);
-    fd.append('year', String(form.year));
-    fd.append('license_plate', form.license_plate);
-    fd.append('price_per_hour', String(form.price_per_hour || ''));
-    fd.append('price_per_day', String(form.price_per_day || ''));
-    fd.append('transmission', form.transmission);
-    fd.append('seats', String(form.seats || ''));
-    if (form.color) fd.append('color', form.color);
-    if (form.vin) fd.append('vin', form.vin);
-    if (form.mileage) fd.append('mileage', String(form.mileage));
-    if (form.maintenance_mileage)
-      fd.append('maintenance_mileage', String(form.maintenance_mileage));
-    if (form.insurance_fee)
-      fd.append('insurance_fee', String(form.insurance_fee));
-    if (form.fuel_capacity)
-      fd.append('fuel_capacity', String(form.fuel_capacity));
-    if (form.fuel_type) fd.append('fuel_type', form.fuel_type);
-    fd.append('make_primary', String(form.make_primary));
-    images.forEach(file => fd.append('images', file));
-
-    api.addVehicle(fd).handle({
-      onSuccess: () => {
-        uiStore?.showSnackbar?.(
-          t('vehicles.feedback.created') || 'Vehicle created',
-          'success',
-        );
-        onCreated();
-      },
-      onError: (err: any) => {
-        uiStore?.showSnackbar?.(
-          err?.response?.data?.error ||
-            (t('vehicles.feedback.createError') as any) ||
-            'Create failed',
-          'danger',
-        );
-      },
-      onFinally: () => setSubmitting(false),
-    });
-  };
-
-  return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-      <DialogTitle>{t('vehicles.add.title') || 'Add vehicle'}</DialogTitle>
-      <DialogContent dividers>
-        <Stack spacing={2} mt={1}>
-          {/* Fila 1: Marca / Tipo / Modelo / Año */}
-          <Stack direction={{xs: 'column', sm: 'row'}} gap={2}>
-            <FormControl size="small" fullWidth>
-              <InputLabel id="brand-sel">
-                {t('vehicles.filters.brand') || 'Brand'}
-              </InputLabel>
-              <Select
-                labelId="brand-sel"
-                label={t('vehicles.filters.brand') || 'Brand'}
-                value={form.brand_id}
-                onChange={e => set('brand_id', e.target.value)}>
-                {brands.map(b => (
-                  <MenuItem key={b.id} value={b.id}>
-                    {b.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl size="small" fullWidth>
-              <InputLabel id="type-sel">
-                {t('vehicles.filters.type') || 'Type'}
-              </InputLabel>
-              <Select
-                labelId="type-sel"
-                label={t('vehicles.filters.type') || 'Type'}
-                value={form.type_id}
-                onChange={e => set('type_id', e.target.value)}>
-                {types.map(tp => (
-                  <MenuItem key={tp.id} value={tp.id}>
-                    {tp.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <TextField
-              label="Model"
-              size="small"
-              value={form.model}
-              onChange={e => set('model', e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Year"
-              size="small"
-              type="number"
-              value={form.year}
-              onChange={e => set('year', e.target.value)}
-              fullWidth
-            />
-          </Stack>
-
-          {/* Fila 2 */}
-          <Stack direction={{xs: 'column', sm: 'row'}} gap={2}>
-            <TextField
-              label="License plate"
-              size="small"
-              value={form.license_plate}
-              onChange={e => set('license_plate', e.target.value)}
-              fullWidth
-            />
-            <FormControl size="small" fullWidth>
-              <InputLabel id="tx-label">Transmission</InputLabel>
-              <Select
-                labelId="tx-label"
-                label="Transmission"
-                value={form.transmission}
-                onChange={e => set('transmission', e.target.value as any)}>
-                <MenuItem value="automatic">Automatic</MenuItem>
-                <MenuItem value="manual">Manual</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              label="Seats"
-              size="small"
-              type="number"
-              value={form.seats}
-              onChange={e => set('seats', e.target.value)}
-              fullWidth
-            />
-          </Stack>
-
-          {/* Fila 3 */}
-          <Stack direction={{xs: 'column', sm: 'row'}} gap={2}>
-            <TextField
-              label="Price/day (USD)"
-              size="small"
-              type="number"
-              value={form.price_per_day}
-              onChange={e => set('price_per_day', e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Price/hour (USD)"
-              size="small"
-              type="number"
-              value={form.price_per_hour}
-              onChange={e => set('price_per_hour', e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Color"
-              size="small"
-              value={form.color}
-              onChange={e => set('color', e.target.value)}
-              fullWidth
-            />
-          </Stack>
-
-          {/* Fila 4 */}
-          <Stack direction={{xs: 'column', sm: 'row'}} gap={2}>
-            <TextField
-              label="VIN"
-              size="small"
-              value={form.vin}
-              onChange={e => set('vin', e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Mileage"
-              size="small"
-              type="number"
-              value={form.mileage}
-              onChange={e => set('mileage', e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Maint. mileage"
-              size="small"
-              type="number"
-              value={form.maintenance_mileage}
-              onChange={e => set('maintenance_mileage', e.target.value)}
-              fullWidth
-            />
-          </Stack>
-
-          {/* Fila 5 */}
-          <Stack direction={{xs: 'column', sm: 'row'}} gap={2}>
-            <TextField
-              label="Insurance fee"
-              size="small"
-              type="number"
-              value={form.insurance_fee}
-              onChange={e => set('insurance_fee', e.target.value)}
-              fullWidth
-            />
-            <TextField
-              label="Fuel capacity"
-              size="small"
-              type="number"
-              value={form.fuel_capacity}
-              onChange={e => set('fuel_capacity', e.target.value)}
-              fullWidth
-            />
-            <FormControl size="small" fullWidth>
-              <InputLabel id="fuel-label">Fuel type</InputLabel>
-              <Select
-                labelId="fuel-label"
-                label="Fuel type"
-                value={form.fuel_type}
-                onChange={e => set('fuel_type', e.target.value as any)}>
-                <MenuItem value="petrol">Petrol</MenuItem>
-                <MenuItem value="diesel">Diesel</MenuItem>
-                <MenuItem value="electric">Electric</MenuItem>
-                <MenuItem value="hybrid">Hybrid</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
-
-          {/* Imágenes */}
-          <Box>
-            <Button component="label" variant="outlined">
-              Upload images
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                hidden
-                onChange={onFileChange}
-              />
-            </Button>
-            <FormHelperText sx={{ml: 1}}>
-              {images.length} file(s) selected
-            </FormHelperText>
-          </Box>
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} disabled={submitting}>
-          {t('common.cancel') || 'Cancel'}
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={submitting}>
-          {submitting
-            ? t('common.saving') || 'Saving…'
-            : t('common.save') || 'Save'}
-        </Button>
-      </DialogActions>
-    </Dialog>
   );
 }

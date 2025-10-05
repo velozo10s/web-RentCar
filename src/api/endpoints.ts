@@ -56,22 +56,22 @@ export const getVehicleTypes = () => {
   return wrapRequest(client.get(`/vehicles/types`));
 };
 
-// CREATE (multipart)
-export const addVehicle = (form: FormData) =>
-  wrapRequest(
-    client.post('/vehicles', form, {
+export const addVehicle = (data: {[key: string]: any}) => {
+  return wrapRequest(
+    client.post('/vehicles', data, {
       headers: {'Content-Type': 'multipart/form-data'},
     }),
   );
+};
 
-// UPDATE (multipart)
-export const updateVehicle = (id: number, form: FormData) =>
-  wrapRequest(
-    client.put(`/vehicles/${id}`, form, {
+export const updateVehicle = (id: number, data: {[key: string]: any}) => {
+  return wrapRequest(
+    client.patch(`/vehicles/${id}`, data, {
       headers: {'Content-Type': 'multipart/form-data'},
     }),
   );
-
-// DELETE
-export const deleteVehicle = (id: number) =>
-  wrapRequest(client.delete(`/vehicles/${id}`));
+};
+//
+// export const deleteVehicle = (id: number) => {
+//   return wrapRequest(client.delete(`/vehicles/${id}`));
+// };

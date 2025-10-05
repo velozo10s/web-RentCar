@@ -20,7 +20,14 @@
   "save": "Guardar",
   "refresh": "Actualizar",
   "refreshing": "Actualizando...",
-  "add": "Agregar"
+  "add": "Agregar",
+  "active": "Activo",
+  "inactive": "Inactivo",
+  "activate": "Activar",
+  "deactivate": "Desactivar",
+  "activating": "Activando…",
+  "deactivating": "Desactivando…",
+  "empty": "No se encontraron resultados"
  },
  "tabNavigator": {
   "home": "Inicio",
@@ -86,6 +93,7 @@
  },
  "vehicles": {
   "title": "Vehiculos",
+  "add": "Agregar Vehiculo",
   "search": "Buscar vehiculo",
   "viewDetails": "Ver detalles",
   "perDay": "/dia",
@@ -94,8 +102,8 @@
   "startDate": "Fecha de inicio",
   "endDate": "Fecha final",
   "transmission": {
-   "automatic": "automático",
-   "manual": "manual"
+   "automatic": "Automático",
+   "manual": "Manual"
   },
   "type": {
    "Sedan": "Sedán",
@@ -123,6 +131,28 @@
     "seats": "Asientos",
     "pricePerDay": "Precio/día"
    }
+  },
+  "fields": {
+   "brand": "Marca",
+   "type": "Tipo",
+   "model": "Modelo",
+   "year": "Año",
+   "license_plate": "Matrícula",
+   "transmission": "Transmisión",
+   "seats": "Asientos",
+   "price_per_day": "Precio/día (USD)",
+   "price_per_hour": "Precio/hora (USD)",
+   "color": "Color",
+   "vin": "VIN",
+   "mileage": "Kilometraje",
+   "maintenance_mileage": "Km de mantenimiento",
+   "insurance_fee": "Cuota de seguro",
+   "fuel_capacity": "Capacidad de combustible",
+   "fuel_type": "Tipo de combustible"
+  },
+  "images": {
+   "filesSelected_one": "{{count}} archivo seleccionado",
+   "filesSelected_other": "{{count}} archivos seleccionados"
   },
   "filters": {
    "title": "Filtros",
