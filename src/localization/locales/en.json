@@ -343,6 +343,11 @@
     "updateError": "Could not update"
    }
   },
+  "rating": {
+   "title": "Ratings",
+   "customerToCompany": "Customer experience (to the company)",
+   "staffToCustomer": "Customer evaluation (by staff)"
+  },
   "filters": {
    "status": "Status",
    "all": "All",

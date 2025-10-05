@@ -7,7 +7,7 @@ import LoginScreen from '../pages/LoginScreen';
 import {StoreContext} from '../main';
 import {CssBaseline, ThemeProvider} from '@mui/material';
 import ReservationsPage from './sideBar/reservations/ReservationsPage';
-import ReservationDetailPage from './sideBar/reservations/reservationDetailPage';
+import ReservationDetailPage from './sideBar/reservations/ReservationDetailPage.tsx';
 import EmployeesPage from './sideBar/employees/EmployeesPage.tsx';
 import CustomersPage from './sideBar/customers/CustomersPage';
 import HomeScreen from './HomeScreen.tsx';

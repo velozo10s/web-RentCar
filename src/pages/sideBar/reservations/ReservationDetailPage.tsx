@@ -31,6 +31,7 @@ import {
 } from '../../../api/endpoints.ts';
 import {useCallback, useEffect, useState} from 'react';
 import AppShell from '../../../components/AppShell.tsx';
+import ReservationRatings from '../../../components/molecules/ReservationRatings.tsx';
 
 export default function ReservationDetailPage() {
   const {t, i18n} = useTranslation();
@@ -43,6 +44,9 @@ export default function ReservationDetailPage() {
   const [loading, setLoading] = useState(false);
   const [changing, setChanging] = useState(false);
   const [newStatus, setNewStatus] = useState<string>('');
+  const statusLower = (reservation?.status || '').toLowerCase();
+  const TERMINAL_STATUSES = ['completed', 'declined', 'cancelled'];
+  const isTerminal = TERMINAL_STATUSES.includes(statusLower);
 
   const formatDateTime = (iso: string) =>
     new Date(iso).toLocaleString(i18n.language);
@@ -60,6 +64,10 @@ export default function ReservationDetailPage() {
   useEffect(() => {
     fetchReservation();
   }, [fetchReservation]);
+
+  useEffect(() => {
+    if (isTerminal) setNewStatus('');
+  }, [isTerminal]);
 
   const actionMap: Record<
     string,
@@ -268,49 +276,54 @@ export default function ReservationDetailPage() {
               </TableContainer>
             </Paper>
 
-            <Paper variant="outlined" sx={{p: 2}}>
-              <Typography variant="subtitle1" mb={1}>
-                {t('reservations.detail.changeStatus.title')}
-              </Typography>
-              <Stack
-                direction={{xs: 'column', sm: 'row'}}
-                spacing={1.5}
-                alignItems={{xs: 'stretch', sm: 'center'}}>
-                <FormControl size="small" sx={{width: 240}}>
-                  <Select
-                    value={newStatus}
-                    onChange={e => setNewStatus(String(e.target.value))}
-                    displayEmpty>
-                    <MenuItem value="">
-                      <em>
-                        {t('reservations.detail.changeStatus.placeholder')}
-                      </em>
-                    </MenuItem>
-                    {/* Solo estados con endpoint */}
-                    <MenuItem value="confirmed">
-                      {t('reservations.status.confirmed')}
-                    </MenuItem>
-                    <MenuItem value="active">
-                      {t('reservations.status.active')}
-                    </MenuItem>
-                    <MenuItem value="completed">
-                      {t('reservations.status.completed')}
-                    </MenuItem>
-                    <MenuItem value="declined">
-                      {t('reservations.status.declined')}
-                    </MenuItem>
-                  </Select>
-                </FormControl>
+            {!isTerminal && (
+              <Paper variant="outlined" sx={{p: 2}}>
+                <Typography variant="subtitle1" mb={1}>
+                  {t('reservations.detail.changeStatus.title')}
+                </Typography>
+                <Stack
+                  direction={{xs: 'column', sm: 'row'}}
+                  spacing={1.5}
+                  alignItems={{xs: 'stretch', sm: 'center'}}>
+                  <FormControl size="small" sx={{width: 240}}>
+                    <Select
+                      value={newStatus}
+                      onChange={e => setNewStatus(String(e.target.value))}
+                      displayEmpty>
+                      <MenuItem value="">
+                        <em>
+                          {t('reservations.detail.changeStatus.placeholder')}
+                        </em>
+                      </MenuItem>
+                      {/* Solo estados con endpoint */}
+                      <MenuItem value="confirmed">
+                        {t('reservations.status.confirmed')}
+                      </MenuItem>
+                      <MenuItem value="active">
+                        {t('reservations.status.active')}
+                      </MenuItem>
+                      <MenuItem value="completed">
+                        {t('reservations.status.completed')}
+                      </MenuItem>
+                      <MenuItem value="declined">
+                        {t('reservations.status.declined')}
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
 
-                <Button
-                  variant="contained"
-                  disabled={!newStatus || changing}
-                  onClick={applyChangeStatus}>
-                  {changing
-                    ? t('reservations.detail.changeStatus.applying')
-                    : t('common.apply')}
-                </Button>
-              </Stack>
+                  <Button
+                    variant="contained"
+                    disabled={!newStatus || changing}
+                    onClick={applyChangeStatus}>
+                    {changing
+                      ? t('reservations.detail.changeStatus.applying')
+                      : t('common.apply')}
+                  </Button>
+                </Stack>
+              </Paper>
+            )}
+            <Paper variant="outlined" sx={{p: 2}}>
+              <ReservationRatings reservation={reservation} />
             </Paper>
           </Stack>
         )}

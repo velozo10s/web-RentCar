@@ -53,10 +53,11 @@ export default function AppShell({
     <Box
       ref={containerRef}
       sx={{
-        minHeight: '100dvh',
+        height: '100dvh',
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
+        overflow: 'hidden',
       }}>
       {/* Sidebar permanente sólo cuando NO es overlay */}
       {!isOverlay && <Sidebar active={active} variant="permanent" />}
@@ -70,6 +71,8 @@ export default function AppShell({
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
+          minHeight: 0,
+          overflow: 'auto',
         }}>
         {/* Botón hamburguesa flotante en overlay (arriba a la izquierda) */}
         {isOverlay && !open && (
@@ -77,7 +80,7 @@ export default function AppShell({
             onClick={() => setOpen(true)}
             aria-label="Abrir menú"
             sx={{
-              position: 'absolute', // o 'absolute' si prefieres relativo al main
+              position: 'fixed', // o 'absolute' si prefieres relativo al main
               top: `calc(env(safe-area-inset-top, 0px) + ${iconOffset}px)`,
               left: `calc(env(safe-area-inset-left, 0px) + ${iconOffset}px)`,
               zIndex: t => t.zIndex.modal + 1, // por encima del contenido

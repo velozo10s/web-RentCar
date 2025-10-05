@@ -1,4 +1,10 @@
 import client, {wrapRequest} from './client';
+import type {
+  CompanyStats,
+  CreateRatingDto,
+  CustomerStats,
+  Rating,
+} from '../lib/types/ratings.ts';
 
 export const login = (data: {[key: string]: any}) => {
   return wrapRequest(client.post('/auth/login/', data));
@@ -87,7 +93,24 @@ export const addEmployee = (data: {[key: string]: any}) => {
 export const updateEmployee = (id: number, data: {[key: string]: any}) => {
   return wrapRequest(client.patch(`/employees/${id}`, data));
 };
-//
-// export const deleteVehicle = (id: number) => {
-//   return wrapRequest(client.delete(`/vehicles/${id}`));
-// };
+
+export const addReservationRating = (
+  reservationId: number,
+  payload: CreateRatingDto,
+) =>
+  wrapRequest(
+    client.post<Rating>(`/reservations/${reservationId}/ratings`, payload),
+  );
+
+export const getReservationRatings = (reservationId: number) =>
+  wrapRequest(
+    client.get<Rating[] | Rating>(`/reservations/${reservationId}/ratings`),
+  );
+
+export const getCompanyRatingStats = () =>
+  wrapRequest(client.get<CompanyStats>(`/ratings/company-stats`));
+
+export const getCustomerRatingStats = (customerUserId: number) =>
+  wrapRequest(
+    client.get<CustomerStats>(`/ratings/customers/${customerUserId}/stats`),
+  );

@@ -343,6 +343,11 @@
     "updateError": "Error al actualizar"
    }
   },
+  "rating": {
+   "title": "Calificaciones",
+   "customerToCompany": "Experiencia del cliente (hacia la empresa)",
+   "staffToCustomer": "Evaluación del cliente (hecha por staff)"
+  },
   "filters": {
    "status": "Estado",
    "all": "Todos",

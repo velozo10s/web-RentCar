@@ -2,7 +2,7 @@ import React from 'react';
 import {renderWithProviders} from './render.tsx';
 import {screen} from '@testing-library/react';
 // import userEvent from '@testing-library/user-event';
-// import ReservationDetailPage from '../pages/reservations/reservationDetailPage.tsx';
+// import ReservationDetailPage from '../pages/reservations/ReservationDetailPage.tsx';
 // // Si usas route param, puedes envolver con MemoryRouter y Route
 // import {MemoryRouter, Route, Routes} from 'react-router-dom';
 //
