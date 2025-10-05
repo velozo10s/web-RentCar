@@ -27,6 +27,23 @@ const RequireAuth = observer(function RequireAuth() {
   return <Outlet />;
 });
 
+const RequireAdmin = observer(function RequireAdmin() {
+  const {userStore} = React.useContext(StoreContext);
+  const location = useLocation();
+
+  const isLoggedIn = Boolean(userStore.accessToken);
+  const role = userStore.user?.role; // 'admin' | 'employee' | 'customer'
+
+  if (!isLoggedIn) {
+    return <Navigate to={ROUTES.LOGIN} replace state={{from: location}} />;
+  }
+  if (role !== 'admin') {
+    // Not authorized: bounce to a safe page (e.g., reservations)
+    return <Navigate to={ROUTES.RESERVATIONS} replace />;
+  }
+  return <Outlet />;
+});
+
 // Guard: solo invitados (si está logueado, redirige)
 const RequireGuest = observer(function RequireGuest() {
   const {userStore} = React.useContext(StoreContext);
@@ -60,9 +77,15 @@ const App = observer(function App() {
             path={ROUTES.RESERVATION}
             element={<ReservationDetailPage />}
           />
-          <Route path={ROUTES.EMPLOYEES} element={<EmployeesPage />} />
           <Route path={ROUTES.CUSTOMERS} element={<CustomersPage />} />
           <Route path={ROUTES.VEHICLES} element={<VehiclesPage />} />
+        </Route>
+
+        <Route element={<RequireAdmin />}>
+          <Route
+            path={ROUTES.EMPLOYEES ?? '/employees'}
+            element={<EmployeesPage />}
+          />
         </Route>
 
         {/* Catch-all */}

@@ -4,15 +4,15 @@
  "common": {
   "cancel": "Cancelar",
   "confirm": "Confirmar",
-  "yes": "Si",
+  "yes": "Sí",
   "no": "No",
   "continue": "Continuar",
   "search": "Buscar",
   "next": "Siguiente",
-  "back": "Atras",
+  "back": "Atrás",
   "any": "Todos",
   "reset": "Limpiar",
-  "apply": "aplicar",
+  "apply": "Aplicar",
   "inbox": "Recibidos",
   "actions": "Acciones",
   "edit": "Editar",
@@ -21,13 +21,18 @@
   "refresh": "Actualizar",
   "refreshing": "Actualizando...",
   "add": "Agregar",
-  "active": "Estado",
+  "active": "Activo",
   "inactive": "Inactivo",
+  "status": "Estado",
   "activate": "Activar",
   "deactivate": "Desactivar",
   "activating": "Activando…",
   "deactivating": "Desactivando…",
-  "empty": "No se encontraron resultados"
+  "empty": "No se encontraron resultados",
+  "noData": "Sin datos",
+  "createdAt": "Creado",
+  "name": "Nombre",
+  "summary": "Resumen"
  },
  "tabNavigator": {
   "home": "Inicio",
@@ -174,6 +179,52 @@
   "bookNow": "Solicitalo ahora!",
   "confirmReservation": "Confirmar",
   "bookYourReservation": "Solicitalo ahora"
+ },
+ "employees": {
+  "title": "Empleados",
+  "add": "Agregar Empleado",
+  "edit": "Editar empleado",
+  "account": "Cuenta",
+  "filters": {
+   "title": "Filtros",
+   "role": "Rol",
+   "search": "Buscar por nombre o email"
+  },
+  "roles": {
+   "customer": "Cliente",
+   "employee": "Empleado"
+  },
+  "fields": {
+   "name": "Nombre",
+   "role": "Rol",
+   "username": "Usuario",
+   "email": "Correo",
+   "password": "Contraseña",
+   "firstName": "Nombre",
+   "lastName": "Apellido",
+   "documentNumber": "Número de documento",
+   "phone": "Teléfono"
+  },
+  "table": {
+   "name": "Nombre",
+   "role": "Rol"
+  },
+  "feedback": {
+   "created": "Empleado creado",
+   "missingFields": "Completa los campos requeridos",
+   "createError": "No se pudo crear el empleado",
+   "updated": "Empleado actualizado",
+   "updateError": "No se pudo actualizar el empleado",
+   "activated": "Empleado activado",
+   "deactivated": "Empleado desactivado",
+   "activateError": "No se pudo activar el empleado",
+   "deactivateError": "No se pudo desactivar el empleado",
+   "noChanges": "No hay cambios para guardar"
+  },
+  "hints": {
+   "passwordOptional": "Deja vacío para mantener la contraseña actual. El backend la hashea.",
+   "editNote": "Este diálogo solo edita username, email, password y activo. Para editar datos de persona, usa el endpoint de Person."
+  }
  },
  "settings": {
   "title": "Pantalla de Configuraciones",

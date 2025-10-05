@@ -71,6 +71,22 @@ export const updateVehicle = (id: number, data: {[key: string]: any}) => {
     }),
   );
 };
+
+export const listEmployees = (params: {[key: string]: any}) => {
+  return wrapRequest(client.get('/employees', {params}));
+};
+
+export const addEmployee = (data: {[key: string]: any}) => {
+  return wrapRequest(
+    client.post('/employees', data, {
+      headers: {'Content-Type': 'multipart/form-data'},
+    }),
+  );
+};
+
+export const updateEmployee = (id: number, data: {[key: string]: any}) => {
+  return wrapRequest(client.patch(`/employees/${id}`, data));
+};
 //
 // export const deleteVehicle = (id: number) => {
 //   return wrapRequest(client.delete(`/vehicles/${id}`));

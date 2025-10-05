@@ -300,7 +300,7 @@ export default function VehiclesPage() {
                     {t('vehicles.vehicleTable.columns.transmission')}
                   </TableCell>
                   {/* Nueva columna: Active */}
-                  <TableCell>{t('common.active') || 'Active'}</TableCell>
+                  <TableCell>{t('common.status') || 'Active'}</TableCell>
                   <TableCell>
                     {t('vehicles.vehicleTable.columns.pricePerDay')}
                   </TableCell>

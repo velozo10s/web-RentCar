@@ -23,7 +23,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import useApi from '../../lib/hooks/useApi';
 import {useTranslation} from 'react-i18next';
 import {useStore} from '../../lib/hooks/useStore';
-import {useEffect, useState} from 'react';
+import {type ChangeEvent, useEffect, useState} from 'react';
 
 type Brand = {id: number; name: string};
 type VType = {id: number; name: string};
@@ -44,9 +44,9 @@ export default function AddVehicleDialog({
   const api = useApi();
   const {uiStore} = useStore();
   const {t} = useTranslation();
-  const [submitting, setSubmitting] = React.useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const [form, setForm] = React.useState({
+  const [form, setForm] = useState({
     brand_id: '' as string | number,
     type_id: '' as string | number,
     model: '',
@@ -72,7 +72,7 @@ export default function AddVehicleDialog({
   const set = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
     setForm(prev => ({...prev, [k]: v}));
 
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) {
       // ensure reselecting same file triggers onChange next time

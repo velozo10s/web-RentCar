@@ -21,13 +21,18 @@
   "refresh": "Refresh",
   "refreshing": "Refreshing...",
   "add": "Add",
-  "active": "Status",
+  "active": "Active",
   "inactive": "Inactive",
+  "status": "Status",
   "activate": "Activate",
   "deactivate": "Deactivate",
   "activating": "Activating…",
   "deactivating": "Deactivating…",
-  "empty": "No data found"
+  "empty": "No data found",
+  "noData": "No data",
+  "createdAt": "Created at",
+  "name": "Name",
+  "summary": "Summary"
  },
  "tabNavigator": {
   "home": "Home",
@@ -174,6 +179,52 @@
   "bookNow": "Book Now!",
   "confirmReservation": "Confirm",
   "bookYourReservation": "Book your reservation"
+ },
+ "employees": {
+  "title": "Employees",
+  "add": "Add employee",
+  "edit": "Edit employee",
+  "account": "Account",
+  "filters": {
+   "title": "Filters",
+   "role": "Role",
+   "search": "Search by name or email"
+  },
+  "roles": {
+   "customer": "Customer",
+   "employee": "Employee"
+  },
+  "fields": {
+   "name": "Name",
+   "role": "Role",
+   "username": "Username",
+   "email": "Email",
+   "password": "Password",
+   "firstName": "First name",
+   "lastName": "Last name",
+   "documentNumber": "Document number",
+   "phone": "Phone"
+  },
+  "table": {
+   "name": "Name",
+   "role": "Role"
+  },
+  "feedback": {
+   "created": "Employee created",
+   "missingFields": "Please complete required fields",
+   "createError": "Could not create employee",
+   "updated": "Employee updated",
+   "updateError": "Could not update employee",
+   "activated": "Employee activated",
+   "deactivated": "Employee deactivated",
+   "activateError": "Could not activate employee",
+   "deactivateError": "Could not deactivate employee",
+   "noChanges": "No changes to save"
+  },
+  "hints": {
+   "passwordOptional": "Leave empty to keep the current password. The backend will hash it.",
+   "editNote": "This dialog only edits username, email, password and active. To edit personal data, use the Person endpoint."
+  }
  },
  "settings": {
   "title": "Settings Screen",

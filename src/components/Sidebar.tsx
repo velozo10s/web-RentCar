@@ -28,6 +28,7 @@ import useApi from '../lib/hooks/useApi';
 import rootStore from '../lib/stores/rootStore';
 import {ROUTES} from '../routes/routes';
 import {useState} from 'react';
+import {observer} from 'mobx-react-lite';
 
 type Props = {
   active?:
@@ -88,7 +89,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   },
 ] as const;
 
-export default function Sidebar({
+export default observer(function Sidebar({
   variant = 'permanent',
   open = false,
   onClose,
@@ -101,6 +102,16 @@ export default function Sidebar({
   const {t} = useTranslation();
   const api = useApi();
   const navigate = useNavigate();
+  const role = rootStore.userStore.user?.role; // 'admin' | 'employee' | 'customer'
+
+  const visibleNavItems = React.useMemo(
+    () =>
+      NAV_ITEMS.filter(item => {
+        if (item.key === 'employees') return role === 'admin';
+        return true;
+      }),
+    [role],
+  );
 
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     try {
@@ -221,7 +232,7 @@ export default function Sidebar({
 
       {/* Navegación */}
       <List sx={{px: variant === 'permanent' && collapsed ? 0 : 1}}>
-        {NAV_ITEMS.map(item => {
+        {visibleNavItems.map(item => {
           const selected = isSelected(item.to);
           const label = t(item.localeKey);
 
@@ -315,4 +326,4 @@ export default function Sidebar({
   }
 
   return Content;
-}
+});
