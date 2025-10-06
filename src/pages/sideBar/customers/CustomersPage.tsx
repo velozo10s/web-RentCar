@@ -17,84 +17,72 @@ import {
   FormControl,
   FormHelperText,
   LinearProgress,
+  InputLabel,
+  Chip,
 } from '@mui/material';
-import {useNavigate} from 'react-router-dom';
-import StatusChip from '../../../components/StatusChip.tsx';
-import type {Reservation} from '../../../lib/types/reservations.ts';
-import useApi from '../../../lib/hooks/useApi.ts';
-import AppShell from '../../../components/AppShell.tsx';
-import {useCallback, useEffect, useState} from 'react';
+import AppShell from '../../../components/AppShell';
+import useApi from '../../../lib/hooks/useApi';
 import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+import type {CustomerSummary} from '../../../lib/types/customers.ts';
 
 export default function CustomersPage() {
   const api = useApi();
-  const navigate = useNavigate();
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
-  const [rows, setRows] = useState<Reservation[]>([]);
-  const [query, setQuery] = useState('');
-  const STATUS_OPTIONS = [
-    {value: 'all', label: t('reservations.status.all')},
-    {value: 'pending', label: t('reservations.status.pending')},
-    {value: 'confirmed', label: t('reservations.status.confirmed')},
-    {value: 'active', label: t('reservations.status.active')},
-    {value: 'completed', label: t('reservations.status.completed')},
-    {value: 'declined', label: t('reservations.status.declined')},
-    {value: 'cancelled', label: t('reservations.status.cancelled')},
-  ];
-  type StatusFilter = (typeof STATUS_OPTIONS)[number]['value'];
+  const [rows, setRows] = React.useState<CustomerSummary[]>([]);
+  const [loading, setLoading] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const [status, setStatus] = useState<StatusFilter>('all');
-  const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
+  // filtros
+  const [query, setQuery] = React.useState('');
+  const [active, setActive] = React.useState<'all' | 'true' | 'false'>('all');
 
-  const formatDate = (iso: string) => new Date(iso).toLocaleDateString();
-
-  const fetchReservations = useCallback(
+  const fetchCustomers = React.useCallback(
     (opts?: {silent?: boolean}) => {
       if (!opts?.silent) setLoading(true);
-      const params = {status};
-
-      api.listReservations(params).handle({
-        onSuccess: (res: Reservation[]) => setRows(res ?? []),
-        onError: () => {
-          setLoading(false);
-          setRefreshing(false);
-        },
+      api.listCustomers({active}).handle({
+        onSuccess: res => setRows(res ?? []),
         onFinally: () => {
           setLoading(false);
           setRefreshing(false);
         },
       });
     },
-    [api, status],
+    [api, active],
   );
 
-  useEffect(() => {
-    fetchReservations();
-  }, [fetchReservations]);
+  React.useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   const filtered = rows.filter(r => {
     const q = query.trim().toLowerCase();
-    if (!q) return true;
-    const inId = String(r.id).includes(q);
-    const inCustomer = String(r.customer_user_id).includes(q);
-    const inItems = r.items?.some(i => String(i.vehicle_id).includes(q));
-    const inNote = (r.note || '').toLowerCase().includes(q);
-    return inId || inCustomer || inItems || inNote;
+    if (q) {
+      const inName = r.name?.toLowerCase().includes(q);
+      const inDoc = r.documentNumber?.toLowerCase().includes(q);
+      const inPhone = (r.phoneNumber || '').toLowerCase().includes(q);
+      if (!inName && !inDoc && !inPhone) return false;
+    }
+    // active ya lo aplicamos server-side, pero si quisieras client-side:
+    // if (active !== 'all') {
+    //   const want = active === 'true';
+    //   if (!!r.isActive !== want) return false;
+    // }
+    return true;
   });
+
+  const fmtDate = (iso?: string) =>
+    iso ? new Date(iso).toLocaleDateString() : '—';
 
   return (
     <AppShell>
       <Box
         component="main"
-        sx={{
-          p: 3,
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
+        sx={{p: 3, display: 'flex', flexDirection: 'column'}}>
         <Typography variant="h6" mb={2} textAlign="center">
-          {t('customers.title')}
+          {t('customers.title') || 'Customers'}
         </Typography>
 
         {/* Toolbar */}
@@ -104,100 +92,102 @@ export default function CustomersPage() {
           alignItems={{xs: 'stretch', sm: 'center'}}
           mb={2}>
           <FormHelperText sx={{m: 0, mr: 1}}>
-            {t('reservations.filters.status')}
+            {t('customers.filters.title') || 'Filters'}
           </FormHelperText>
 
-          <FormControl size="small" sx={{width: 220}}>
+          <FormControl size="small" sx={{width: 200}}>
+            <InputLabel id="active-label">
+              {t('common.active') || 'Active'}
+            </InputLabel>
             <Select
-              value={status}
-              onChange={e => setStatus(e.target.value as StatusFilter)}>
-              {STATUS_OPTIONS.map(op => (
-                <MenuItem key={op.value} value={op.value}>
-                  {op.label}
-                </MenuItem>
-              ))}
+              labelId="active-label"
+              label={t('common.active') || 'Active'}
+              value={active}
+              onChange={e => setActive(e.target.value as any)}>
+              <MenuItem value="all">{t('common.any') || 'All'}</MenuItem>
+              <MenuItem value="true">
+                {t('common.onlyActive') || 'Only active'}
+              </MenuItem>
+              <MenuItem value="false">
+                {t('common.onlyInactive') || 'Only inactive'}
+              </MenuItem>
             </Select>
           </FormControl>
 
           <Box sx={{flex: 1}} />
 
-          {/* Que el buscador pueda expandirse */}
           <TextField
             size="small"
-            placeholder={t('reservations.filters.searchPlaceholder')}
+            placeholder={
+              t('customers.filters.searchPlaceholder') ||
+              'Search by name, doc, or phone'
+            }
             value={query}
             onChange={e => setQuery(e.target.value)}
-            sx={{width: {xs: '100%', sm: 300}, flexShrink: 0}}
+            sx={{width: {xs: '100%', sm: 320}, flexShrink: 0}}
           />
 
           <Button
             variant="outlined"
             onClick={() => {
               setRefreshing(true);
-              fetchReservations({silent: true});
+              fetchCustomers({silent: true});
             }}>
             {refreshing
-              ? t('common.refresh.refreshing')
-              : t('common.refresh.refresh')}
+              ? t('common.refreshing') || 'Refreshing…'
+              : t('common.refresh') || 'Refresh'}
           </Button>
         </Stack>
 
         {loading && <LinearProgress sx={{mb: 1}} />}
 
-        {/* Contenedor de tabla que LLENA el espacio restante */}
-        <Paper
-          variant="outlined"
-          sx={{
-            display: 'flex',
-          }}>
-          <TableContainer sx={{flex: 1 /* altura completa */, width: '100%'}}>
+        <Paper variant="outlined" sx={{display: 'flex'}}>
+          <TableContainer sx={{flex: 1, width: '100%'}}>
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>{t('reservations.table.columns.id')}</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell>{t('customers.table.name') || 'Name'}</TableCell>
                   <TableCell>
-                    {t('reservations.table.columns.customer')}
+                    {t('customers.table.doc') || 'Document'}
                   </TableCell>
-                  <TableCell>{t('reservations.table.columns.items')}</TableCell>
                   <TableCell>
-                    {t('reservations.table.columns.dateRange')}
+                    {t('customers.table.birth') || 'Birth date'}
                   </TableCell>
-                  <TableCell>{t('reservations.table.columns.total')}</TableCell>
-                  <TableCell>
-                    {t('reservations.table.columns.status')}
+                  <TableCell>{t('customers.table.phone') || 'Phone'}</TableCell>
+                  <TableCell>{t('common.active') || 'Active'}</TableCell>
+                  <TableCell align="center">
+                    {t('common.actions') || 'Actions'}
                   </TableCell>
-                  <TableCell align="center">{t('common.actions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {filtered.map(row => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.document_number}</TableCell>
+                  <TableRow key={row.personId} hover>
+                    <TableCell>{row.personId}</TableCell>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell>
-                      {row.items?.length
-                        ? `${row.items.length} ${t('reservations.table.itemsPlural')} · ${row.items.map(i => i.vehicle_id).join(', ')}`
-                        : '—'}
+                      {row.documentType} · {row.documentNumber}
                     </TableCell>
+                    <TableCell>{fmtDate(row.birthDate)}</TableCell>
+                    <TableCell>{row.phoneNumber || '—'}</TableCell>
                     <TableCell>
-                      {formatDate(row.start_at)}&nbsp;
-                      {t('reservations.table.columns.to')}&nbsp;
-                      {formatDate(row.end_at)}
-                    </TableCell>
-                    <TableCell>
-                      {Number(row.total_amount).toLocaleString(undefined, {
-                        style: 'currency',
-                        currency: 'USD',
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      <StatusChip status={row.status} />
+                      <Chip
+                        label={
+                          row.isActive
+                            ? t('common.active') || 'Active'
+                            : t('common.inactive') || 'Inactive'
+                        }
+                        color={row.isActive ? 'success' : 'default'}
+                        variant="outlined"
+                        size="small"
+                      />
                     </TableCell>
                     <TableCell align="center">
                       <Button
                         size="small"
-                        onClick={() => navigate(`/reservations/${row.id}`)}>
-                        {t('reservations.actions.viewDetail')}
+                        onClick={() => navigate(`/customers/${row.personId}`)}>
+                        {t('common.viewDetails') || 'View details'}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -209,7 +199,7 @@ export default function CustomersPage() {
                       colSpan={7}
                       align="center"
                       sx={{py: 6, color: 'text.secondary'}}>
-                      No hay resultados
+                      {t('common.empty') || 'No results'}
                     </TableCell>
                   </TableRow>
                 )}

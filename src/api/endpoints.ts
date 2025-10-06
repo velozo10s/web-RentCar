@@ -5,6 +5,7 @@ import type {
   CustomerStats,
   Rating,
 } from '../lib/types/ratings.ts';
+import type {CustomerSummary, CustomerDetail} from '../lib/types/customers.ts';
 
 export const login = (data: {[key: string]: any}) => {
   return wrapRequest(client.post('/auth/login/', data));
@@ -114,3 +115,9 @@ export const getCustomerRatingStats = (customerUserId: number) =>
   wrapRequest(
     client.get<CustomerStats>(`/ratings/customers/${customerUserId}/stats`),
   );
+
+export const listCustomers = (params?: {active?: 'all' | 'true' | 'false'}) =>
+  wrapRequest(client.get<CustomerSummary[]>('/customers', {params}));
+
+export const getCustomer = (personId: number) =>
+  wrapRequest(client.get<CustomerDetail>(`/customers/${personId}`));

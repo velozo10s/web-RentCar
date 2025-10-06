@@ -32,7 +32,13 @@
   "noData": "Sin datos",
   "createdAt": "Creado",
   "name": "Nombre",
-  "summary": "Resumen"
+  "summary": "Resumen",
+  "onlyActive": "Solo activos",
+  "onlyInactive": "Solo inactivos",
+  "viewDetails": "Ver detalles",
+  "saving": "Guardando…",
+  "unexpectedError": "Error inesperado",
+  "optional": "Opcional"
  },
  "tabNavigator": {
   "home": "Inicio",
@@ -224,6 +230,48 @@
   "hints": {
    "passwordOptional": "Deja vacío para mantener la contraseña actual. El backend la hashea.",
    "editNote": "Este diálogo solo edita username, email, password y activo. Para editar datos de persona, usa el endpoint de Person."
+  },
+  "addDialog": {
+   "roleChip": {
+    "help": "Este formulario usa context=WEB para crear/asignar el rol Empleado."
+   },
+   "sections": {
+    "documents": "Documentos (opcionales)",
+    "license": "Licencia (opcional)"
+   },
+   "fields": {
+    "documentType": "Tipo de documento",
+    "documentNumber": "Número de documento",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "phoneNumber": "Teléfono",
+    "nationalityCode": "Nacionalidad",
+    "nationalityCodeHint": "(ISO-2, p. ej., PY)",
+    "birthDate": "Fecha de nacimiento",
+    "username": "Usuario",
+    "email": "Correo",
+    "password": "Contraseña",
+    "expirationDocument": "Vencimiento del documento",
+    "expirationLicense": "Vencimiento de la licencia",
+    "passportEntryDate": "Fecha de entrada del pasaporte",
+    "passportEntryDateHelp": "Usado para extranjeros, si aplica"
+   },
+   "uploads": {
+    "documentFront": "Frente del documento",
+    "documentBack": "Dorso del documento",
+    "licenseFront": "Frente de la licencia",
+    "licenseBack": "Dorso de la licencia"
+   },
+   "helpers": {
+    "passwordPlainWarning": "Se envía en texto plano; el backend hashea con bcrypt."
+   },
+   "validation": {
+    "missingCredentials": "Complete usuario, email y contraseña.",
+    "missingDocumentNumber": "Ingrese el número de documento.",
+    "missingFirstName": "Ingrese el nombre.",
+    "missingDocumentType": "Seleccione el tipo de documento (CI/PASSPORT/...).",
+    "invalidNationalityCode": "La nacionalidad debe ser ISO-2 (p. ej., PY)."
+   }
   }
  },
  "settings": {
@@ -289,6 +337,27 @@
    "invalidCustomerStatus": "Identificador del usuario invalido.",
    "notOwner": "Esta reserva no es tuya.",
    "cannotCancelled": "No se puede cancelar despues de la fecha de inicio."
+  },
+  "employees": {
+   "required": "Faltan campos obligatorios.",
+   "alreadyExists": "El usuario/correo no está disponible.",
+   "invalidId": "Identificador inválido.",
+   "notFound": "Empleado no encontrado."
+  },
+  "vehicles": {
+   "missingField": "Falta campo requerido.",
+   "duplicate": "Ya existe un vehículo con los mismos datos (ej. matrícula).",
+   "invalidId": "Identificador inválido.",
+   "upcomingReservations": "El vehículo tiene reservas actuales o próximas.",
+   "notFound": "Vehículo no encontrado."
+  },
+  "ratings": {
+   "invalidId": "Identificador de reserva inválido.",
+   "invalidDirection": "Dirección inválida.",
+   "invalidScore": "Puntaje inválido (1..5).",
+   "notEligible": "La reserva debe estar finalizada para poder calificar.",
+   "alreadyExists": "Ya existe una calificación para esta reserva y dirección.",
+   "invalidUser": "Identificador de usuario inválido."
   }
  },
  "errors": {
@@ -346,7 +415,8 @@
   "rating": {
    "title": "Calificaciones",
    "customerToCompany": "Experiencia del cliente (hacia la empresa)",
-   "staffToCustomer": "Evaluación del cliente (hecha por staff)"
+   "staffToCustomer": "Evaluación del cliente (hecha por staff)",
+   "noRatingsYet": "No hay calificaciones disponibles para esta reserva todavía."
   },
   "filters": {
    "status": "Estado",
@@ -377,6 +447,36 @@
    "completed": "Finalizado",
    "declined": "Rechazado",
    "cancelled": "Cancelado"
+  }
+ },
+ "customers": {
+  "title": "Clientes",
+  "filters": {
+   "title": "Filtros",
+   "searchPlaceholder": "Buscar por nombre, documento o teléfono"
+  },
+  "table": {
+   "id": "ID",
+   "name": "Nombre",
+   "doc": "Documento",
+   "birth": "Fecha de nacimiento",
+   "phone": "Teléfono"
+  },
+  "detail": {
+   "title": "Detalle de cliente",
+   "name": "Nombre",
+   "document": "Documento",
+   "birth": "Fecha de nacimiento",
+   "phone": "Teléfono",
+   "documents": "Documentos",
+   "noDocuments": "No hay documentos subidos.",
+   "expires": "Vence: {{date}}",
+   "front": "Frente",
+   "back": "Dorso",
+   "docTypes": {
+    "license": "Licencia de conducir",
+    "document": "Documento de identidad"
+   }
   }
  }
 }

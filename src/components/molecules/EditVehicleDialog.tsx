@@ -1,3 +1,4 @@
+// src/pages/vehicles/EditVehicleDialog.tsx
 import * as React from 'react';
 import {
   Stack,
@@ -99,7 +100,7 @@ export default function EditVehicleDialog({
     make_primary: false,
   });
 
-  // --- NUEVO: snapshot inicial para detectar cambios (dirty) ---
+  // --- Snapshot inicial para detectar cambios (dirty) ---
   const [initialSnapshot, setInitialSnapshot] = useState<{
     form: typeof form | null;
     existingIds: number[];
@@ -233,16 +234,36 @@ export default function EditVehicleDialog({
     ...f,
     brand_id: f.brand_id || '',
     type_id: f.type_id || '',
+    model: String(f.model || ''),
     year: String(f.year || ''),
+    license_plate: String(f.license_plate || ''),
+    transmission: String(f.transmission || ''),
     seats: String(f.seats || ''),
     price_per_day: String(f.price_per_day || ''),
     price_per_hour: String(f.price_per_hour || ''),
+    color: String(f.color || ''),
+    vin: String(f.vin || ''),
     mileage: String(f.mileage || ''),
     maintenance_mileage: String(f.maintenance_mileage || ''),
     insurance_fee: String(f.insurance_fee || ''),
     fuel_capacity: String(f.fuel_capacity || ''),
+    fuel_type: String(f.fuel_type || ''),
     make_primary: Boolean(f.make_primary),
   });
+
+  // 🔎 calcula diff de campos (sin imágenes)
+  const getChangedFieldEntries = () => {
+    if (!initialSnapshot?.form) return [] as Array<[keyof typeof form, any]>;
+    const curr = normalizeForm(form);
+    const base = normalizeForm(initialSnapshot.form);
+    const changed: Array<[keyof typeof form, any]> = [];
+    (Object.keys(curr) as Array<keyof typeof form>).forEach(k => {
+      if (curr[k] !== (base as any)[k]) {
+        changed.push([k, curr[k]]);
+      }
+    });
+    return changed;
+  };
 
   const isFormValid = useMemo(() => {
     return Boolean(
@@ -256,25 +277,19 @@ export default function EditVehicleDialog({
 
   const isDirty = useMemo(() => {
     if (!initialSnapshot) return false;
-
-    // 1) cambios en campos
     const sameForm = shallowEqual(
       normalizeForm(form),
       normalizeForm(initialSnapshot.form as typeof form),
     );
-
-    // 2) cambios en imágenes (nuevas o eliminadas)
     const anyNew = newImages.length > 0;
     const anyRemoved = removedImageIds.size > 0;
-
     return !(sameForm && !anyNew && !anyRemoved);
   }, [form, initialSnapshot, newImages.length, removedImageIds]);
 
-  // --- Submit (multipart) ---
+  // --- Submit (multipart, solo cambios) ---
   const handleSubmit = () => {
     if (!vehicle) return;
 
-    // Validación rápida
     if (!isFormValid) {
       uiStore?.showSnackbar?.(
         t('vehicles.feedback.missingFields') ||
@@ -284,34 +299,53 @@ export default function EditVehicleDialog({
       return;
     }
 
+    if (!isDirty) {
+      uiStore?.showSnackbar?.(
+        t('employees.feedback.noChanges') || 'No changes to save',
+        'info',
+      );
+      return;
+    }
+
     setSubmitting(true);
     const fd = new FormData();
-    fd.append('brand_id', String(form.brand_id));
-    fd.append('type_id', String(form.type_id));
-    fd.append('model', form.model);
-    fd.append('year', String(form.year));
-    fd.append('license_plate', form.license_plate);
-    fd.append('transmission', form.transmission);
-    fd.append('seats', String(form.seats || ''));
-    fd.append('price_per_day', String(form.price_per_day || ''));
-    fd.append('price_per_hour', String(form.price_per_hour || ''));
-    if (form.color) fd.append('color', form.color);
-    if (form.vin) fd.append('vin', form.vin);
-    if (form.mileage) fd.append('mileage', String(form.mileage));
-    if (form.maintenance_mileage)
-      fd.append('maintenance_mileage', String(form.maintenance_mileage));
-    if (form.insurance_fee)
-      fd.append('insurance_fee', String(form.insurance_fee));
-    if (form.fuel_capacity)
-      fd.append('fuel_capacity', String(form.fuel_capacity));
-    if (form.fuel_type) fd.append('fuel_type', form.fuel_type);
-    fd.append('make_primary', String(form.make_primary));
 
-    // → Imágenes nuevas
+    // Mapea claves del form -> nombres en API (son iguales aquí)
+    const apiFieldName: Record<keyof typeof form, string> = {
+      brand_id: 'brand_id',
+      type_id: 'type_id',
+      model: 'model',
+      year: 'year',
+      license_plate: 'license_plate',
+      transmission: 'transmission',
+      seats: 'seats',
+      price_per_day: 'price_per_day',
+      price_per_hour: 'price_per_hour',
+      color: 'color',
+      vin: 'vin',
+      mileage: 'mileage',
+      maintenance_mileage: 'maintenance_mileage',
+      insurance_fee: 'insurance_fee',
+      fuel_capacity: 'fuel_capacity',
+      fuel_type: 'fuel_type',
+      make_primary: 'make_primary',
+    };
+
+    // ➤ Solo campos cambiados
+    const changedEntries = getChangedFieldEntries();
+    changedEntries.forEach(([k, v]) => {
+      const name = apiFieldName[k];
+      // stringifica booleans o numbers para FormData
+      fd.append(name, typeof v === 'boolean' ? String(v) : String(v ?? ''));
+    });
+
+    // ➤ Imágenes nuevas (si hay)
     newImages.forEach(file => fd.append('images', file));
 
-    // → Imágenes a eliminar
-    removedImageIds.forEach(id => fd.append('remove_images[]', String(id)));
+    // ➤ Imágenes a eliminar (IDs separados por coma)
+    if (removedImageIds.size > 0) {
+      fd.append('delete_image_ids', Array.from(removedImageIds).join(','));
+    }
 
     api.updateVehicle(vehicle.id, fd).handle({
       onSuccess: () => {
@@ -332,10 +366,6 @@ export default function EditVehicleDialog({
       onFinally: () => setSubmitting(false),
     });
   };
-  console.log(
-    'existingImages ids =>',
-    existingImages.map(i => i.id),
-  );
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -686,7 +716,7 @@ export default function EditVehicleDialog({
       </DialogContent>
 
       <DialogActions>
-        {/* Opcional: revertir cambios si hay dirty */}
+        {/* Revertir cambios si hay dirty */}
         {initialSnapshot && (
           <Button
             variant="text"

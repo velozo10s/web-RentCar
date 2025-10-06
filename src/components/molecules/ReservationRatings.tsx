@@ -165,7 +165,7 @@ export default function ReservationRatings({
         !byDirection.customer_to_company &&
         !byDirection.employee_to_customer && (
           <Typography variant="body2" color="text.secondary">
-            No hay calificaciones disponibles para esta reserva todavía.
+            {t('reservations.rating.noRatingsYet')}
           </Typography>
         )}
     </Paper>

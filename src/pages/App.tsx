@@ -14,6 +14,7 @@ import HomeScreen from './HomeScreen.tsx';
 import {darkTheme} from '../themes/dark.ts';
 import {observer} from 'mobx-react-lite';
 import VehiclesPage from './sideBar/vehicles/VehiclesPage.tsx';
+import CustomerDetailPage from './sideBar/customers/CustomerDetailPage.tsx';
 
 // Guard: requiere sesión
 const RequireAuth = observer(function RequireAuth() {
@@ -78,6 +79,7 @@ const App = observer(function App() {
             element={<ReservationDetailPage />}
           />
           <Route path={ROUTES.CUSTOMERS} element={<CustomersPage />} />
+          <Route path={ROUTES.CUSTOMER} element={<CustomerDetailPage />} />
           <Route path={ROUTES.VEHICLES} element={<VehiclesPage />} />
         </Route>
 
