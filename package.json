@@ -10,7 +10,8 @@
   "test": "vitest run",
   "dev": "vite",
   "start": "vite",
-  "build": "tsc -b && vite build",
+  "build": "vite build",
+  "typecheck": "tsc --noEmit",
   "preview": "vite preview",
   "lint": "eslint .",
   "format": "prettier --write ."

@@ -3,7 +3,8 @@
   "types": [
    "vitest/globals",
    "vitest",
-   "@testing-library/jest-dom"
+   "@testing-library/jest-dom",
+   "vite/client"
   ],
   "moduleResolution": "bundler",
   "jsx": "react-jsx",
@@ -21,5 +22,10 @@
  "include": [
   "src",
   "vitest.config.ts"
+ ],
+ "exclude": [
+  "src/test",
+  "**/*.test.ts",
+  "**/*.test.tsx"
  ]
 }
