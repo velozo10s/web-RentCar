@@ -5,12 +5,7 @@
    "vitest",
    "@testing-library/jest-dom"
   ],
-  "include": [
-   "src",
-   "vitest.config.ts"
-  ],
   "moduleResolution": "bundler",
-  // <- ayuda a resolver ESM modernos
   "jsx": "react-jsx",
   "skipLibCheck": true
  },
@@ -22,5 +17,9 @@
   {
    "path": "./tsconfig.node.json"
   }
+ ],
+ "include": [
+  "src",
+  "vitest.config.ts"
  ]
 }
