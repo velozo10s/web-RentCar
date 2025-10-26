@@ -1,482 +1,487 @@
 {
- "appName": "Rent Car",
- "greeting": "Welcome, {{name}}!",
- "common": {
-  "cancel": "Cancel",
-  "confirm": "Confirm",
-  "yes": "Yes",
-  "no": "No",
-  "continue": "Continue",
-  "search": "Search",
-  "next": "Next",
-  "back": "Back",
-  "any": "All",
-  "reset": "Reset",
-  "apply": "Apply",
-  "inbox": "Inbox",
-  "actions": "Actions",
-  "edit": "Edit",
-  "delete": "Delete",
-  "save": "Save",
-  "refresh": "Refresh",
-  "refreshing": "Refreshing...",
-  "add": "Add",
-  "active": "Active",
-  "inactive": "Inactive",
-  "status": "Status",
-  "activate": "Activate",
-  "deactivate": "Deactivate",
-  "activating": "Activating…",
-  "deactivating": "Deactivating…",
-  "empty": "No results found",
-  "noData": "No data",
-  "createdAt": "Created",
-  "name": "Name",
-  "summary": "Summary",
-  "onlyActive": "Only active",
-  "onlyInactive": "Only inactive",
-  "viewDetails": "View details",
-  "saving": "Saving…",
-  "unexpectedError": "Unexpected error",
-  "optional": "Optional"
- },
- "tabNavigator": {
-  "home": "Home",
-  "settings": "Settings"
- },
- "login": {
-  "title": "Sign in",
-  "loginButton": "Sign in",
-  "user": "User",
-  "userPlaceholder": "User",
-  "password": "Password",
-  "passwordPlaceholder": "Password",
-  "forgotPassword": "Forgot your password?",
-  "noAccount": "Don't have an account yet?"
- },
- "signUp": {
-  "title": "Sign up",
-  "signUpButton": "Sign up",
-  "documentType": "Document Type",
-  "documentTypePlaceholder": "Select the document type",
-  "documentNumber": "Document Number",
-  "documentNumberPlaceholder": "Enter your document number",
-  "firstName": "First Name",
-  "firstNamePlaceholder": "Enter your first name",
-  "lastName": "Last Name",
-  "lastNamePlaceholder": "Enter your last name",
-  "phoneNumber": "Phone Number",
-  "phoneNumberPlaceholder": "Enter your phone number",
-  "nationalityCode": "Nationality",
-  "nationalityCodePlaceholder": "Select your nationality",
-  "birthDate": "Date of Birth",
-  "birthDatePlaceholder": "Select your date of birth",
-  "username": "Username",
-  "usernamePlaceholder": "Choose a username",
-  "email": "Email",
-  "emailPlaceholder": "Enter your email",
-  "password": "Password",
-  "passwordPlaceholder": "Enter your password",
-  "confirmPassword": "Confirm Password",
-  "confirmPasswordPlaceholder": "Confirm your password",
-  "context": "Context",
-  "contextPlaceholder": "Select context",
-  "expirationDocument": "Document Expiration Date",
-  "expirationDocumentPlaceholder": "Select expiration date",
-  "expirationLicense": "License Expiration Date",
-  "expirationLicensePlaceholder": "Select expiration date",
-  "passportEntryDate": "Passport Entry Date",
-  "passportEntryDatePlaceholder": "Select entry date",
-  "documentFront": "Document Front",
-  "documentBack": "Document Back",
-  "licenseFront": "License Front",
-  "licenseBack": "License Back",
-  "backToLogin": "Already have an account?"
- },
- "forgotPassword": {
-  "title": "Recover Password",
-  "email": "Email",
-  "submitButton": "Send recovery link",
-  "backToLogin": "Back to Sign in"
- },
- "home": {
-  "title": "Home Screen"
- },
- "vehicles": {
-  "title": "Vehicles",
-  "add": "Add Vehicle",
-  "edit": "Edit Vehicle",
-  "search": "Search vehicle",
-  "viewDetails": "View details",
-  "perDay": "/day",
-  "perHour": "/hour",
-  "seats": "seats",
-  "startDate": "Start date",
-  "endDate": "End date",
-  "transmission": {
-   "automatic": "Automatic",
-   "manual": "Manual"
+  "appName": "Rent Car",
+  "greeting": "Welcome, {{name}}!",
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "continue": "Continue",
+    "search": "Search",
+    "next": "Next",
+    "back": "Back",
+    "any": "All",
+    "reset": "Reset",
+    "apply": "Apply",
+    "inbox": "Inbox",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
+    "add": "Add",
+    "active": "Active",
+    "inactive": "Inactive",
+    "status": "Status",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "activating": "Activating…",
+    "deactivating": "Deactivating…",
+    "empty": "No results found",
+    "noData": "No data",
+    "createdAt": "Created",
+    "name": "Name",
+    "summary": "Summary",
+    "onlyActive": "Only active",
+    "onlyInactive": "Only inactive",
+    "viewDetails": "View details",
+    "saving": "Saving…",
+    "unexpectedError": "Unexpected error",
+    "optional": "Optional"
   },
-  "type": {
-   "Sedan": "Sedan",
-   "SUV": "SUV",
-   "Truck": "Light truck",
-   "Van": "Van",
-   "Electric": "Electric"
+  "tabNavigator": {
+    "home": "Home",
+    "settings": "Settings"
   },
-  "fuel": {
-   "petrol": "petrol",
-   "diesel": "diesel",
-   "electric": "electric"
-  },
-  "mileage": "mileage",
-  "insuranceFee": "Insurance",
-  "vehicleTable": {
-   "columns": {
-    "id": "ID",
-    "brand": "Brand",
-    "type": "Type",
-    "model": "Model",
-    "year": "Year",
-    "plate": "Plate",
-    "transmission": "Transmission",
-    "seats": "Seats",
-    "pricePerDay": "Price/day"
-   }
-  },
-  "fields": {
-   "brand": "Brand",
-   "type": "Type",
-   "model": "Model",
-   "year": "Year",
-   "license_plate": "Plate",
-   "transmission": "Transmission",
-   "seats": "Seats",
-   "price_per_day": "Price/day (USD)",
-   "price_per_hour": "Price/hour (USD)",
-   "color": "Color",
-   "vin": "VIN",
-   "mileage": "Mileage",
-   "maintenance_mileage": "Maintenance km",
-   "insurance_fee": "Insurance fee",
-   "fuel_capacity": "Fuel capacity",
-   "fuel_type": "Fuel type"
-  },
-  "images": {
-   "filesSelected_one": "{{count}} file selected",
-   "filesSelected_other": "{{count}} files selected",
-   "current": "Current images",
-   "primary": "Primary image"
-  },
-  "filters": {
-   "title": "Filters",
-   "sortBy": "Sort by",
-   "orderAsc": "Ascending",
-   "orderDesc": "Descending",
-   "brand": "Brand",
-   "type": "Type",
-   "transmission": "Transmission",
-   "dates": "Dates",
-   "newest": "Newest",
-   "pricePerDay": "Price/day",
-   "dateHint": "Select both dates to filter by availability.",
-   "dateError": "Start and end dates must be valid."
-  },
-  "bookNow": "Request it now!",
-  "confirmReservation": "Confirm",
-  "bookYourReservation": "Request it now"
- },
- "employees": {
-  "title": "Employees",
-  "add": "Add Employee",
-  "edit": "Edit employee",
-  "account": "Account",
-  "filters": {
-   "title": "Filters",
-   "role": "Role",
-   "search": "Search by name or email"
-  },
-  "roles": {
-   "customer": "Customer",
-   "employee": "Employee"
-  },
-  "fields": {
-   "name": "Name",
-   "role": "Role",
-   "username": "Username",
-   "email": "Email",
-   "password": "Password",
-   "firstName": "First name",
-   "lastName": "Last name",
-   "documentNumber": "Document number",
-   "phone": "Phone"
-  },
-  "table": {
-   "name": "Name",
-   "role": "Role"
-  },
-  "feedback": {
-   "created": "Employee created",
-   "missingFields": "Fill in the required fields",
-   "createError": "Could not create employee",
-   "updated": "Employee updated",
-   "updateError": "Could not update employee",
-   "activated": "Employee activated",
-   "deactivated": "Employee deactivated",
-   "activateError": "Could not activate employee",
-   "deactivateError": "Could not deactivate employee",
-   "noChanges": "No changes to save"
-  },
-  "hints": {
-   "passwordOptional": "Leave empty to keep the current password. The backend hashes it.",
-   "editNote": "This dialog only edits username, email, password and active. To edit person data, use the Person endpoint."
-  },
-  "addDialog": {
-   "roleChip": {
-    "help": "This form uses context=WEB to create/assign the Employee role."
-   },
-   "sections": {
-    "documents": "Documents (optional)",
-    "license": "License (optional)"
-   },
-   "fields": {
-    "documentType": "Document type",
-    "documentNumber": "Document number",
-    "firstName": "First name",
-    "lastName": "Last name",
-    "phoneNumber": "Phone number",
-    "nationalityCode": "Nationality",
-    "nationalityCodeHint": "(ISO-2, e.g., PY)",
-    "birthDate": "Birth date",
-    "username": "Username",
-    "email": "Email",
+  "login": {
+    "title": "Sign in",
+    "loginButton": "Sign in",
+    "user": "User",
+    "userPlaceholder": "User",
     "password": "Password",
-    "expirationDocument": "Document expiration",
-    "expirationLicense": "License expiration",
-    "passportEntryDate": "Passport entry date",
-    "passportEntryDateHelp": "Used for foreigners, if applicable"
-   },
-   "uploads": {
-    "documentFront": "Document front",
-    "documentBack": "Document back",
-    "licenseFront": "License front",
-    "licenseBack": "License back"
-   },
-   "helpers": {
-    "passwordPlainWarning": "It is sent in plain text; the backend hashes it with bcrypt."
-   },
-   "validation": {
-    "missingCredentials": "Fill username, email and password.",
-    "missingDocumentNumber": "Enter the document number.",
-    "missingFirstName": "Enter the first name.",
-    "missingDocumentType": "Select the document type (CI/PASSPORT/...).",
-    "invalidNationalityCode": "Nationality must be ISO-2 (e.g., PY)."
-   }
-  }
- },
- "settings": {
-  "title": "Settings Screen",
-  "language": "Language",
-  "switchLanguage": "Switch Language",
-  "toggleTheme": "Toggle Theme",
-  "logout": "Log out"
- },
- "drawer": {
-  "preferences": "Preferences",
-  "darkTheme": "Dark Mode",
-  "language": "Language"
- },
- "modals": {
-  "userAccount": {
-   "title": "User: {{username}}"
+    "passwordPlaceholder": "Password",
+    "forgotPassword": "Forgot your password?",
+    "noAccount": "Don't have an account yet?"
   },
-  "selectLanguageModal": {
-   "title": "Select Language",
-   "placeholder": "Select Language",
-   "languages": {
-    "en": "English",
-    "es": "Spanish"
-   }
-  }
- },
- "documentTypes": {
-  "id": "National ID",
-  "passport": "Passport"
- },
- "snackBarMessages": {
-  "networkError": "Network error. Please check your connection or contact support",
-  "generalError": "Something went wrong. Please retry or contact support",
-  "loginError": "Couldn't sign in, please try again later",
-  "signUpSuccess": "User registered successfully! :D",
-  "signUpError": "Couldn't register user, please try again later",
-  "loginSuccess": "Welcome {{username}} :D",
-  "bookSuccess": "Your car reservation request has been sent successfully!"
- },
- "backendRes": {
-  "successLogin": "Session started! :D",
-  "badReqLogin": "Email or password incorrect, please try again",
-  "noCredentials": "Username and password are required.",
-  "incorrectPassword": "Incorrect password",
-  "unauthorized": "Unauthorized",
-  "forbidden": "Not allowed: insufficient permissions.",
-  "userNotFound": "User not found.",
   "signUp": {
-   "noRequiredFields": "Missing required fields.",
-   "alreadyExists": "Username/email is not available."
+    "title": "Sign up",
+    "signUpButton": "Sign up",
+    "documentType": "Document Type",
+    "documentTypePlaceholder": "Select the document type",
+    "documentNumber": "Document Number",
+    "documentNumberPlaceholder": "Enter your document number",
+    "firstName": "First Name",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter your phone number",
+    "nationalityCode": "Nationality",
+    "nationalityCodePlaceholder": "Select your nationality",
+    "birthDate": "Date of Birth",
+    "birthDatePlaceholder": "Select your date of birth",
+    "username": "Username",
+    "usernamePlaceholder": "Choose a username",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "context": "Context",
+    "contextPlaceholder": "Select context",
+    "expirationDocument": "Document Expiration Date",
+    "expirationDocumentPlaceholder": "Select expiration date",
+    "expirationLicense": "License Expiration Date",
+    "expirationLicensePlaceholder": "Select expiration date",
+    "passportEntryDate": "Passport Entry Date",
+    "passportEntryDatePlaceholder": "Select entry date",
+    "documentFront": "Document Front",
+    "documentBack": "Document Back",
+    "licenseFront": "License Front",
+    "licenseBack": "License Back",
+    "backToLogin": "Already have an account?"
   },
-  "reservation": {
-   "noRequiredFields": "Missing required fields.",
-   "vehiclesNotFound": "One or more vehicles were not found.",
-   "inactive": "One or more vehicles are inactive.",
-   "confirmed": "One or more vehicles are not available.",
-   "error": "Could not create the request, please try again later",
-   "reservationNotFound": "Reservation not found.",
-   "invalidId": "Invalid identifier.",
-   "invalidStatus": "Invalid status filter.",
-   "invalidStatusChange": "That status change is not allowed",
-   "invalidCustomerStatus": "Invalid user identifier.",
-   "notOwner": "This reservation is not yours.",
-   "cannotCancelled": "Cannot cancel after the start date."
+  "forgotPassword": {
+    "title": "Recover Password",
+    "email": "Email",
+    "submitButton": "Send recovery link",
+    "backToLogin": "Back to Sign in"
   },
-  "employees": {
-   "required": "Missing required fields.",
-   "alreadyExists": "Username/email is not available.",
-   "invalidId": "Invalid identifier.",
-   "notFound": "Employee not found."
+  "home": {
+    "title": "Home Screen"
   },
   "vehicles": {
-   "missingField": "Required field missing.",
-   "duplicate": "A vehicle with the same data already exists (e.g. plate).",
-   "invalidId": "Invalid identifier.",
-   "upcomingReservations": "The vehicle has current or upcoming reservations.",
-   "notFound": "Vehicle not found."
-  },
-  "ratings": {
-   "invalidId": "Invalid reservation identifier.",
-   "invalidDirection": "Invalid direction.",
-   "invalidScore": "Invalid score (1..5).",
-   "notEligible": "The reservation must be completed to be rated.",
-   "alreadyExists": "A rating already exists for this reservation and direction.",
-   "invalidUser": "Invalid user identifier."
-  }
- },
- "errors": {
-  "required": "{{field}} is required"
- },
- "languages": {
-  "english": "English",
-  "spanish": "Spanish"
- },
- "sidebar": {
-  "home": "Home",
-  "reservations": "Reservations",
-  "vehicles": "Vehicles",
-  "reports": "Reports",
-  "customers": "Customers",
-  "employees": "Employees",
-  "logout": "Log out",
-  "expandMenu": "Expand menu",
-  "collapseMenu": "Collapse menu",
-  "closeMenu": "Close menu"
- },
- "reservations": {
-  "title": "Reservations",
-  "detail": {
-   "title": "Reservation detail",
-   "reservation": "Reservation",
-   "currentStatus": "Current status",
-   "customer": "Customer",
-   "fullName": "Full name",
-   "start": "From",
-   "end": "To",
-   "total": "Total",
-   "note": "Note",
-   "vehicles": "Vehicles",
-   "vehiclesTable": {
-    "columns": {
-     "id": "ID",
-     "brand": "Brand",
-     "model": "Model",
-     "year": "Year",
-     "amount": "Amount"
+    "title": "Vehicles",
+    "add": "Add Vehicle",
+    "edit": "Edit Vehicle",
+    "search": "Search vehicle",
+    "viewDetails": "View details",
+    "perDay": "/day",
+    "perHour": "/hour",
+    "seats": "seats",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "transmission": {
+      "automatic": "Automatic",
+      "manual": "Manual"
+    },
+    "type": {
+      "Sedan": "Sedan",
+      "SUV": "SUV",
+      "Truck": "Light truck",
+      "Van": "Van",
+      "Electric": "Electric"
+    },
+    "fuel": {
+      "petrol": "petrol",
+      "diesel": "diesel",
+      "electric": "electric"
+    },
+    "mileage": "mileage",
+    "insuranceFee": "Insurance",
+    "vehicleTable": {
+      "columns": {
+        "id": "ID",
+        "brand": "Brand",
+        "type": "Type",
+        "model": "Model",
+        "year": "Year",
+        "plate": "Plate",
+        "transmission": "Transmission",
+        "seats": "Seats",
+        "pricePerDay": "Price/day"
+      }
+    },
+    "fields": {
+      "brand": "Brand",
+      "type": "Type",
+      "model": "Model",
+      "year": "Year",
+      "license_plate": "Plate",
+      "transmission": "Transmission",
+      "seats": "Seats",
+      "price_per_day": "Price/day (USD)",
+      "price_per_hour": "Price/hour (USD)",
+      "color": "Color",
+      "vin": "VIN",
+      "mileage": "Mileage",
+      "maintenance_mileage": "Maintenance km",
+      "insurance_fee": "Insurance fee",
+      "fuel_capacity": "Fuel capacity",
+      "fuel_type": "Fuel type"
+    },
+    "images": {
+      "filesSelected_one": "{{count}} file selected",
+      "filesSelected_other": "{{count}} files selected",
+      "current": "Current images",
+      "primary": "Primary image"
+    },
+    "filters": {
+      "title": "Filters",
+      "sortBy": "Sort by",
+      "orderAsc": "Ascending",
+      "orderDesc": "Descending",
+      "brand": "Brand",
+      "type": "Type",
+      "transmission": "Transmission",
+      "dates": "Dates",
+      "newest": "Newest",
+      "pricePerDay": "Price/day",
+      "dateHint": "Select both dates to filter by availability.",
+      "dateError": "Start and end dates must be valid."
+    },
+    "bookNow": "Request it now!",
+    "confirmReservation": "Confirm",
+    "bookYourReservation": "Request it now",
+    "feedback": {
+      "deactivated": "CAMBIAR",
+      "activated": "CAMBIAR",
+      "updated": "CAMBIAR"
     }
-   },
-   "changeStatus": {
-    "title": "Change status",
-    "placeholder": "Select a status",
-    "applying": "Applying…",
-    "notAllowed": "That status can't be changed from here"
-   },
-   "toasts": {
-    "updated": "Status updated",
-    "updateError": "Error updating"
-   }
   },
-  "rating": {
-   "title": "Ratings",
-   "customerToCompany": "Customer experience (toward the company)",
-   "staffToCustomer": "Customer evaluation (by staff)",
-   "noRatingsYet": "There are no ratings available for this reservation yet."
+  "employees": {
+    "title": "Employees",
+    "add": "Add Employee",
+    "edit": "Edit employee",
+    "account": "Account",
+    "filters": {
+      "title": "Filters",
+      "role": "Role",
+      "search": "Search by name or email"
+    },
+    "roles": {
+      "customer": "Customer",
+      "employee": "Employee"
+    },
+    "fields": {
+      "name": "Name",
+      "role": "Role",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "documentNumber": "Document number",
+      "phone": "Phone"
+    },
+    "table": {
+      "name": "Name",
+      "role": "Role"
+    },
+    "feedback": {
+      "created": "Employee created",
+      "missingFields": "Fill in the required fields",
+      "createError": "Could not create employee",
+      "updated": "Employee updated",
+      "updateError": "Could not update employee",
+      "activated": "Employee activated",
+      "deactivated": "Employee deactivated",
+      "activateError": "Could not activate employee",
+      "deactivateError": "Could not deactivate employee",
+      "noChanges": "No changes to save"
+    },
+    "hints": {
+      "passwordOptional": "Leave empty to keep the current password. The backend hashes it.",
+      "editNote": "This dialog only edits username, email, password and active. To edit person data, use the Person endpoint."
+    },
+    "addDialog": {
+      "roleChip": {
+        "help": "This form uses context=WEB to create/assign the Employee role."
+      },
+      "sections": {
+        "documents": "Documents (optional)",
+        "license": "License (optional)"
+      },
+      "fields": {
+        "documentType": "Document type",
+        "documentNumber": "Document number",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phoneNumber": "Phone number",
+        "nationalityCode": "Nationality",
+        "nationalityCodeHint": "(ISO-2, e.g., PY)",
+        "birthDate": "Birth date",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "expirationDocument": "Document expiration",
+        "expirationLicense": "License expiration",
+        "passportEntryDate": "Passport entry date",
+        "passportEntryDateHelp": "Used for foreigners, if applicable"
+      },
+      "uploads": {
+        "documentFront": "Document front",
+        "documentBack": "Document back",
+        "licenseFront": "License front",
+        "licenseBack": "License back"
+      },
+      "helpers": {
+        "passwordPlainWarning": "It is sent in plain text; the backend hashes it with bcrypt."
+      },
+      "validation": {
+        "missingCredentials": "Fill username, email and password.",
+        "missingDocumentNumber": "Enter the document number.",
+        "missingFirstName": "Enter the first name.",
+        "missingDocumentType": "Select the document type (CI/PASSPORT/...).",
+        "invalidNationalityCode": "Nationality must be ISO-2 (e.g., PY)."
+      }
+    }
   },
-  "filters": {
-   "status": "Status",
-   "all": "All",
-   "searchPlaceholder": "Search"
+  "settings": {
+    "title": "Settings Screen",
+    "language": "Language",
+    "switchLanguage": "Switch Language",
+    "toggleTheme": "Toggle Theme",
+    "logout": "Log out"
   },
-  "table": {
-   "columns": {
-    "id": "ID",
-    "customer": "Customer",
-    "items": "Items",
-    "dateRange": "From/To",
-    "to": "to",
-    "total": "Total",
-    "status": "Status"
-   },
-   "itemsSingular": "vehicle",
-   "itemsPlural": "vehicle(s)"
+  "drawer": {
+    "preferences": "Preferences",
+    "darkTheme": "Dark Mode",
+    "language": "Language"
   },
-  "actions": {
-   "viewDetail": "View detail"
+  "modals": {
+    "userAccount": {
+      "title": "User: {{username}}"
+    },
+    "selectLanguageModal": {
+      "title": "Select Language",
+      "placeholder": "Select Language",
+      "languages": {
+        "en": "English",
+        "es": "Spanish"
+      }
+    }
   },
-  "status": {
-   "all": "All",
-   "pending": "Pending",
-   "confirmed": "Confirmed",
-   "active": "Active",
-   "completed": "Completed",
-   "declined": "Declined",
-   "cancelled": "Cancelled"
+  "documentTypes": {
+    "id": "National ID",
+    "passport": "Passport"
+  },
+  "snackBarMessages": {
+    "networkError": "Network error. Please check your connection or contact support",
+    "generalError": "Something went wrong. Please retry or contact support",
+    "loginError": "Couldn't sign in, please try again later",
+    "signUpSuccess": "User registered successfully! :D",
+    "signUpError": "Couldn't register user, please try again later",
+    "loginSuccess": "Welcome {{username}} :D",
+    "bookSuccess": "Your car reservation request has been sent successfully!"
+  },
+  "backendRes": {
+    "successLogin": "Session started! :D",
+    "badReqLogin": "Email or password incorrect, please try again",
+    "noCredentials": "Username and password are required.",
+    "incorrectPassword": "Incorrect password",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Not allowed: insufficient permissions.",
+    "userNotFound": "User not found.",
+    "signUp": {
+      "noRequiredFields": "Missing required fields.",
+      "alreadyExists": "Username/email is not available."
+    },
+    "reservation": {
+      "noRequiredFields": "Missing required fields.",
+      "vehiclesNotFound": "One or more vehicles were not found.",
+      "inactive": "One or more vehicles are inactive.",
+      "confirmed": "One or more vehicles are not available.",
+      "error": "Could not create the request, please try again later",
+      "reservationNotFound": "Reservation not found.",
+      "invalidId": "Invalid identifier.",
+      "invalidStatus": "Invalid status filter.",
+      "invalidStatusChange": "That status change is not allowed",
+      "invalidCustomerStatus": "Invalid user identifier.",
+      "notOwner": "This reservation is not yours.",
+      "cannotCancelled": "Cannot cancel after the start date."
+    },
+    "employees": {
+      "required": "Missing required fields.",
+      "alreadyExists": "Username/email is not available.",
+      "invalidId": "Invalid identifier.",
+      "notFound": "Employee not found."
+    },
+    "vehicles": {
+      "missingField": "Required field missing.",
+      "duplicate": "A vehicle with the same data already exists (e.g. plate).",
+      "invalidId": "Invalid identifier.",
+      "upcomingReservations": "The vehicle has current or upcoming reservations.",
+      "notFound": "Vehicle not found."
+    },
+    "ratings": {
+      "invalidId": "Invalid reservation identifier.",
+      "invalidDirection": "Invalid direction.",
+      "invalidScore": "Invalid score (1..5).",
+      "notEligible": "The reservation must be completed to be rated.",
+      "alreadyExists": "A rating already exists for this reservation and direction.",
+      "invalidUser": "Invalid user identifier."
+    }
+  },
+  "errors": {
+    "required": "{{field}} is required"
+  },
+  "languages": {
+    "english": "English",
+    "spanish": "Spanish"
+  },
+  "sidebar": {
+    "home": "Home",
+    "reservations": "Reservations",
+    "vehicles": "Vehicles",
+    "reports": "Reports",
+    "customers": "Customers",
+    "employees": "Employees",
+    "logout": "Log out",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "closeMenu": "Close menu"
+  },
+  "reservations": {
+    "title": "Reservations",
+    "detail": {
+      "title": "Reservation detail",
+      "reservation": "Reservation",
+      "currentStatus": "Current status",
+      "customer": "Customer",
+      "fullName": "Full name",
+      "start": "From",
+      "end": "To",
+      "total": "Total",
+      "note": "Note",
+      "vehicles": "Vehicles",
+      "vehiclesTable": {
+        "columns": {
+          "id": "ID",
+          "brand": "Brand",
+          "model": "Model",
+          "year": "Year",
+          "amount": "Amount"
+        }
+      },
+      "changeStatus": {
+        "title": "Change status",
+        "placeholder": "Select a status",
+        "applying": "Applying…",
+        "notAllowed": "That status can't be changed from here"
+      },
+      "toasts": {
+        "updated": "Status updated",
+        "updateError": "Error updating"
+      }
+    },
+    "rating": {
+      "title": "Ratings",
+      "customerToCompany": "Customer experience (toward the company)",
+      "staffToCustomer": "Customer evaluation (by staff)",
+      "noRatingsYet": "There are no ratings available for this reservation yet."
+    },
+    "filters": {
+      "status": "Status",
+      "all": "All",
+      "searchPlaceholder": "Search"
+    },
+    "table": {
+      "columns": {
+        "id": "ID",
+        "customer": "Customer",
+        "items": "Items",
+        "dateRange": "From/To",
+        "to": "to",
+        "total": "Total",
+        "status": "Status"
+      },
+      "itemsSingular": "vehicle",
+      "itemsPlural": "vehicle(s)"
+    },
+    "actions": {
+      "viewDetail": "View detail"
+    },
+    "status": {
+      "all": "All",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "active": "Active",
+      "completed": "Completed",
+      "declined": "Declined",
+      "cancelled": "Cancelled"
+    }
+  },
+  "customers": {
+    "title": "Customers",
+    "filters": {
+      "title": "Filters",
+      "searchPlaceholder": "Search by name, document or phone"
+    },
+    "table": {
+      "id": "ID",
+      "name": "Name",
+      "doc": "Document",
+      "birth": "Birth date",
+      "phone": "Phone"
+    },
+    "detail": {
+      "title": "Customer detail",
+      "name": "Name",
+      "document": "Document",
+      "birth": "Birth date",
+      "phone": "Phone",
+      "documents": "Documents",
+      "noDocuments": "No documents uploaded.",
+      "expires": "Expires: {{date}}",
+      "front": "Front",
+      "back": "Back",
+      "docTypes": {
+        "license": "Driver license",
+        "document": "Identity document"
+      }
+    }
   }
- },
- "customers": {
-  "title": "Customers",
-  "filters": {
-   "title": "Filters",
-   "searchPlaceholder": "Search by name, document or phone"
-  },
-  "table": {
-   "id": "ID",
-   "name": "Name",
-   "doc": "Document",
-   "birth": "Birth date",
-   "phone": "Phone"
-  },
-  "detail": {
-   "title": "Customer detail",
-   "name": "Name",
-   "document": "Document",
-   "birth": "Birth date",
-   "phone": "Phone",
-   "documents": "Documents",
-   "noDocuments": "No documents uploaded.",
-   "expires": "Expires: {{date}}",
-   "front": "Front",
-   "back": "Back",
-   "docTypes": {
-    "license": "Driver license",
-    "document": "Identity document"
-   }
-  }
- }
 }
