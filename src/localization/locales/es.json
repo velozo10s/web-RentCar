@@ -184,7 +184,12 @@
   },
   "bookNow": "Solicitalo ahora!",
   "confirmReservation": "Confirmar",
-  "bookYourReservation": "Solicitalo ahora"
+  "bookYourReservation": "Solicitalo ahora",
+  "feedback": {
+   "deactivated": "Vehiculo desactivado exitosamente.",
+   "activated": "Vehiculo activado exitosamente.",
+   "updated": "Vehiculo actualizado exitosamente."
+  }
  },
  "employees": {
   "title": "Empleados",

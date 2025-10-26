@@ -9,6 +9,13 @@ import {
   ImageList,
   ImageListItem,
   ImageListItemBar,
+  IconButton,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import AppShell from '../../../components/AppShell';
 import useApi from '../../../lib/hooks/useApi';
@@ -19,7 +26,9 @@ import type {
   CustomerDocument,
 } from '../../../lib/types/customers.ts';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Button from '@mui/material/Button';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DownloadIcon from '@mui/icons-material/Download';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function CustomerDetailPage() {
   const {id} = useParams<{id: string}>();
@@ -157,6 +166,92 @@ function DocumentBlock({doc}: {doc: CustomerDocument}) {
         ? 'Identity document'
         : doc.type;
 
+  // Simple viewer state — stores which image is open
+  const [viewer, setViewer] = React.useState<{
+    open: boolean;
+    src: string;
+    title: string;
+  } | null>(null);
+
+  const openViewer = (src: string, title: string) =>
+    setViewer({open: true, src, title});
+  const closeViewer = () => setViewer(null);
+
+  const cols = Math.min(
+    2,
+    ['frontFilePath', 'backFilePath'].filter(k => (doc as any)[k]).length,
+  );
+
+  async function downloadImageBlob(
+    url: string,
+    filename?: string,
+    extraHeaders?: Record<string, string>,
+  ) {
+    try {
+      const res = await fetch(url, {
+        // Sends cookies for same-origin and cookie-based auth
+        credentials: 'include',
+        headers: {
+          ...(extraHeaders || {}),
+        },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const blob = await res.blob();
+
+      // Try to get filename from headers if server provides it
+      const cd = res.headers.get('content-disposition') || '';
+      const headerNameMatch = cd.match(
+        /filename\*?=(?:UTF-8'')?["']?([^"';\n]+)["']?/i,
+      );
+      const headerName = headerNameMatch
+        ? decodeURIComponent(headerNameMatch[1])
+        : undefined;
+
+      const finalName =
+        headerName || filename || deriveFileNameFromUrl(url) || 'download';
+
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = finalName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      // Fallback: open in new tab if download fails
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
+  function deriveFileNameFromUrl(url: string) {
+    try {
+      const u = new URL(url, window.location.href);
+      const last = u.pathname.split('/').filter(Boolean).pop();
+      if (!last) return undefined;
+      // If it has no extension, add one; most ID/back photos are jpeg/png
+      if (!/\.[a-z0-9]{2,4}$/i.test(last)) return `${last}.jpg`;
+      return last;
+    } catch {
+      return undefined;
+    }
+  }
+
+  function extractBaseName(url: string): string {
+    try {
+      // Tomamos la última parte del path (ej: "1111111-CI-document_back-1761482508738.jpg")
+      const fileName = url.split('/').pop() || '';
+
+      // Quitamos la extensión (.jpg, .png, etc.)
+      const nameWithoutExt = fileName.replace(/\.[^.]+$/, '');
+
+      // Si hay un número o timestamp al final separado por guiones, lo removemos
+      return nameWithoutExt.replace(/-\d+$/, '');
+    } catch {
+      return '';
+    }
+  }
+
   return (
     <Box>
       <Stack direction="row" alignItems="center" gap={1} mb={1}>
@@ -171,46 +266,134 @@ function DocumentBlock({doc}: {doc: CustomerDocument}) {
         )}
       </Stack>
 
-      <ImageList
-        cols={Math.min(
-          2,
-          ['frontFilePath', 'backFilePath'].filter(k => (doc as any)[k]).length,
-        )}
-        gap={8}
-        sx={{m: 0}}>
+      <ImageList cols={cols} gap={8} sx={{m: 0}}>
         {doc.frontFilePath && (
-          <ImageListItem>
-            <img
-              src={doc.frontFilePath}
-              alt="front"
-              loading="lazy"
-              style={{
-                borderRadius: 4,
-                objectFit: 'cover',
-                width: '100%',
-                height: 220,
-              }}
-            />
-            <ImageListItemBar title="Front" position="bottom" />
-          </ImageListItem>
+          <ImageThumb
+            src={doc.frontFilePath}
+            title="Front"
+            onPreview={() =>
+              openViewer(doc.frontFilePath!, extractBaseName(doc.backFilePath!))
+            }
+          />
         )}
         {doc.backFilePath && (
-          <ImageListItem>
-            <img
-              src={doc.backFilePath}
-              alt="back"
-              loading="lazy"
-              style={{
-                borderRadius: 4,
-                objectFit: 'cover',
-                width: '100%',
-                height: 220,
-              }}
-            />
-            <ImageListItemBar title="Back" position="bottom" />
-          </ImageListItem>
+          <ImageThumb
+            src={doc.backFilePath}
+            title="Back"
+            onPreview={() =>
+              openViewer(doc.backFilePath!, extractBaseName(doc.backFilePath!))
+            }
+          />
         )}
       </ImageList>
+
+      {/* Viewer Dialog */}
+      <Dialog
+        open={!!viewer?.open}
+        onClose={closeViewer}
+        maxWidth="lg"
+        fullWidth>
+        <DialogTitle sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+          <Typography variant="subtitle1" sx={{flex: 1}}>
+            {viewer?.title}
+          </Typography>
+          <Tooltip title="Close">
+            <IconButton onClick={closeViewer} aria-label="Close preview">
+              <CloseIcon />
+            </IconButton>
+          </Tooltip>
+        </DialogTitle>
+        <DialogContent
+          dividers
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            p: 0,
+            backgroundColor: theme => theme.palette.grey[100],
+          }}>
+          {viewer?.src && (
+            <Box sx={{width: '100%', textAlign: 'center'}}>
+              <img
+                src={viewer.src}
+                alt={viewer.title}
+                style={{
+                  width: '100%',
+                  maxHeight: '80vh',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{px: 2, py: 1.5}}>
+          {viewer?.src && (
+            <Button
+              variant="outlined"
+              startIcon={<DownloadIcon />}
+              onClick={() =>
+                downloadImageBlob(
+                  viewer.src,
+                  viewer.title?.replace(/\s+/g, '_').toLowerCase() + '.jpg',
+                )
+              }>
+              Download
+            </Button>
+          )}
+          <Button
+            onClick={closeViewer}
+            variant="contained"
+            startIcon={<CloseIcon />}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
+  );
+}
+
+function ImageThumb({
+  src,
+  title,
+  onPreview,
+}: {
+  src: string;
+  title: string;
+  onPreview: () => void;
+}) {
+  return (
+    <ImageListItem sx={{position: 'relative'}}>
+      <Box
+        component="img"
+        src={src}
+        alt={title}
+        loading="lazy"
+        onClick={onPreview}
+        style={{
+          borderRadius: 4,
+          objectFit: 'cover',
+          width: '100%',
+          height: 220,
+          cursor: 'zoom-in',
+          display: 'block',
+        }}
+      />
+      <ImageListItemBar
+        title={title}
+        position="bottom"
+        actionIcon={
+          <Tooltip title="Preview">
+            <IconButton
+              sx={{color: 'white'}}
+              aria-label={`Preview ${title}`}
+              onClick={onPreview}>
+              <VisibilityIcon />
+            </IconButton>
+          </Tooltip>
+        }
+        actionPosition="right"
+      />
+    </ImageListItem>
   );
 }

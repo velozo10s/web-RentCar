@@ -130,7 +130,7 @@ export type ApiErrorData = {
 };
 
 class RequestWrapper<T> {
-  constructor(private promise: Promise<AxiosResponse<T>>) {}
+  constructor(public promise: Promise<AxiosResponse<T>>) {}
 
   handle(opts: HandleOptions<T> = {}) {
     this.promise

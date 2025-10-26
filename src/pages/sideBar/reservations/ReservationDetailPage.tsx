@@ -16,47 +16,45 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Toolbar,
 } from '@mui/material';
 import {useParams, useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-import StatusChip from '../../../components/StatusChip.tsx';
-import type {Reservation} from '../../../lib/types/reservations.ts';
-import useApi from '../../../lib/hooks/useApi.ts';
-import {useStore} from '../../../lib/hooks/useStore.ts';
+import StatusChip from '../../../components/StatusChip';
+import {type Reservation} from '../../../lib/types/reservations';
+import useApi from '../../../lib/hooks/useApi';
+import {useStore} from '../../../lib/hooks/useStore';
+import {useEffect} from 'react';
 import {
-  confirmReservation,
-  declineReservation,
   activateReservation,
   completeReservation,
-} from '../../../api/endpoints.ts';
-import {useCallback, useEffect, useState} from 'react';
-import AppShell from '../../../components/AppShell.tsx';
-import ReservationRatings from '../../../components/molecules/ReservationRatings.tsx';
+  confirmReservation,
+  declineReservation,
+} from '../../../api/endpoints';
+import AppShell from '../../../components/AppShell';
 
 export default function ReservationDetailPage() {
-  const {t, i18n} = useTranslation();
   const {id} = useParams();
   const navigate = useNavigate();
   const api = useApi();
-  const rootStore = useStore();
+  const root = useStore();
 
-  const [reservation, setReservation] = useState<Reservation | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [changing, setChanging] = useState(false);
-  const [newStatus, setNewStatus] = useState<string>('');
-  const statusLower = (reservation?.status || '').toLowerCase();
-  const TERMINAL_STATUSES = ['completed', 'declined', 'cancelled'];
-  const isTerminal = TERMINAL_STATUSES.includes(statusLower);
+  const [reservation, setReservation] = React.useState<Reservation | null>(
+    null,
+  );
+  const [loading, setLoading] = React.useState(false);
+  const [changing, setChanging] = React.useState(false);
+  const [newStatus, setNewStatus] = React.useState<string>('');
 
-  const formatDateTime = (iso: string) =>
-    new Date(iso).toLocaleString(i18n.language);
+  const formatDateTime = (iso: string) => new Date(iso).toLocaleString();
 
-  const fetchReservation = useCallback(() => {
+  const fetchReservation = React.useCallback(() => {
     if (!id) return;
     setLoading(true);
-
     api.getReservation(Number(id)).handle({
       onSuccess: (res: Reservation) => setReservation(res),
+      onError: () => {
+        //root.uiStore?.showSnackbar?.('Error al cargar la reserva', 'danger');
+      },
       onFinally: () => setLoading(false),
     });
   }, [api, id]);
@@ -64,10 +62,6 @@ export default function ReservationDetailPage() {
   useEffect(() => {
     fetchReservation();
   }, [fetchReservation]);
-
-  useEffect(() => {
-    if (isTerminal) setNewStatus('');
-  }, [isTerminal]);
 
   const actionMap: Record<
     string,
@@ -83,25 +77,19 @@ export default function ReservationDetailPage() {
     if (!reservation || !newStatus) return;
     const fn = actionMap[newStatus.toLowerCase()];
     if (!fn) {
-      // @ts-ignore
-      rootStore.uiStore?.showSnackbar?.(
-        t('reservations.detail.changeStatus.notAllowed'),
+      root.uiStore?.showSnackbar?.(
+        'Ese estado no se puede cambiar desde aquí',
         'warning',
       );
       return;
     }
-
     setChanging(true);
     const prev = reservation.status;
     setReservation({...reservation, status: newStatus});
 
     fn(reservation.id).handle({
       onSuccess: () => {
-        // @ts-ignore
-        rootStore.uiStore?.showSnackbar?.(
-          t('reservations.detail.toasts.updated'),
-          'success',
-        );
+        root.uiStore?.showSnackbar?.('Estado actualizado', 'success');
       },
       onError: () => {
         setReservation(prevRes =>
@@ -116,170 +104,194 @@ export default function ReservationDetailPage() {
     });
   };
 
+  const openContract = React.useCallback(() => {
+    if (!reservation) return;
+
+    const token = root.userStore.accessToken;
+    if (!token) {
+      root.uiStore?.showSnackbar?.('Sesión no válida', 'warning');
+      return;
+    }
+
+    api
+      .downloadContractPdf(reservation.id)
+      .promise.then(res => {
+        // res: AxiosResponse<ArrayBuffer>
+        const cd =
+          res.headers?.['content-disposition'] ||
+          (res.headers as any)?.get?.('content-disposition');
+
+        let filename = `contrato-${reservation.id}.pdf`;
+        if (cd) {
+          const m = /filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i.exec(cd);
+          if (m && m[1]) filename = decodeURIComponent(m[1]);
+        }
+
+        const blob = new Blob([res.data], {type: 'application/pdf'});
+        const blobUrl = URL.createObjectURL(blob);
+
+        const w = window.open(blobUrl, '_blank');
+        if (!w) {
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
+
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+      })
+      .catch(err => {
+        console.error(err);
+        root.uiStore?.showSnackbar?.('No se pudo abrir el contrato', 'danger');
+      });
+  }, [reservation, root.userStore.accessToken, root.uiStore, api]);
+
   return (
     <AppShell>
-      <Box
-        component="main"
-        sx={{width: '100%', p: 3, display: 'flex', flexDirection: 'column'}}>
-        <Stack direction="row" alignItems="center" mb={2}>
-          <Typography
-            variant="h6"
-            sx={{
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              whiteSpace: 'nowrap',
-            }}>
-            {t('reservations.detail.title')}
-          </Typography>
+      <Box display="flex" minHeight="100dvh" width="100%">
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            p: 3,
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+          {/* Header */}
+          <Toolbar
+            disableGutters
+            sx={{mb: 2, gap: 1, justifyContent: 'space-between'}}>
+            <Typography variant="h6">Detalle de reserva</Typography>
+            <Stack direction="row" gap={1}>
+              <Button variant="outlined" onClick={openContract}>
+                📄 Generar contrato
+              </Button>
+              <Button onClick={() => navigate(-1)}>Volver</Button>
+            </Stack>
+          </Toolbar>
 
-          <Box sx={{ml: 'auto'}}>
-            <Button onClick={() => navigate(-1)}>{t('common.back')}</Button>
-          </Box>
-        </Stack>
+          {loading && <LinearProgress sx={{mb: 2}} />}
 
-        {loading && <LinearProgress sx={{mb: 2}} />}
+          {reservation && (
+            <Stack spacing={2}>
+              <Paper variant="outlined" sx={{p: 2}}>
+                <Stack
+                  direction={{xs: 'column', sm: 'row'}}
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="space-between">
+                  <Stack spacing={0.5}>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Reserva
+                    </Typography>
+                    <Typography variant="h5">#{reservation.id}</Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography variant="body2" color="text.secondary">
+                      Estado actual:
+                    </Typography>
+                    <StatusChip status={reservation.status} />
+                  </Stack>
+                </Stack>
 
-        {reservation && (
-          <Stack spacing={4}>
-            <Paper variant="outlined" sx={{p: 2}}>
-              <Stack
-                direction={{xs: 'column', sm: 'row'}}
-                spacing={2}
-                alignItems="center"
-                justifyContent="space-between">
-                <Stack spacing={0.5}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    {t('reservations.detail.reservation')}
-                  </Typography>
-                  <Typography variant="h5">#{reservation.id}</Typography>
-                </Stack>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography variant="body2" color="text.secondary">
-                    {t('reservations.detail.currentStatus')}:
-                  </Typography>
-                  <StatusChip status={reservation.status} />
-                </Stack>
-              </Stack>
+                <Divider sx={{my: 2}} />
 
-              <Divider sx={{my: 2}} />
+                <Stack direction={{xs: 'column', sm: 'row'}} spacing={3}>
+                  <Stack spacing={0.5} sx={{minWidth: 240}}>
+                    <Typography variant="body2" color="text.secondary">
+                      Cliente (user_id)
+                    </Typography>
+                    <Typography variant="body1">
+                      {reservation.customer_user_id}
+                    </Typography>
+                  </Stack>
+                  <Stack spacing={0.5} sx={{minWidth: 280}}>
+                    <Typography variant="body2" color="text.secondary">
+                      Desde
+                    </Typography>
+                    <Typography variant="body1">
+                      {formatDateTime(reservation.start_at)}
+                    </Typography>
+                  </Stack>
+                  <Stack spacing={0.5} sx={{minWidth: 280}}>
+                    <Typography variant="body2" color="text.secondary">
+                      Hasta
+                    </Typography>
+                    <Typography variant="body1">
+                      {formatDateTime(reservation.end_at)}
+                    </Typography>
+                  </Stack>
+                  <Stack spacing={0.5} sx={{minWidth: 200}}>
+                    <Typography variant="body2" color="text.secondary">
+                      Total
+                    </Typography>
+                    <Typography variant="body1">
+                      {Number(reservation.total_amount).toLocaleString(
+                        undefined,
+                        {
+                          style: 'currency',
+                          currency: 'USD',
+                        },
+                      )}
+                    </Typography>
+                  </Stack>
+                </Stack>
 
-              <Stack
-                direction={{xs: 'column', sm: 'row'}}
-                justifyContent="space-between"
-                spacing={10}>
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('reservations.detail.customer')}
-                  </Typography>
-                  <Typography variant="body1">
-                    {reservation.document_number}
-                  </Typography>
-                </Stack>
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('reservations.detail.fullName')}
-                  </Typography>
-                  <Typography variant="body1">
-                    {reservation.full_name}
-                  </Typography>
-                </Stack>
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('reservations.detail.start')}
-                  </Typography>
-                  <Typography variant="body1">
-                    {formatDateTime(reservation.start_at)}
-                  </Typography>
-                </Stack>
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('reservations.detail.end')}
-                  </Typography>
-                  <Typography variant="body1">
-                    {formatDateTime(reservation.end_at)}
-                  </Typography>
-                </Stack>
-                <Stack spacing={0.5}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('reservations.detail.total')}
-                  </Typography>
-                  <Typography variant="body1">
-                    {Number(reservation.total_amount).toLocaleString(
-                      undefined,
-                      {style: 'currency', currency: 'USD'},
-                    )}
-                  </Typography>
-                </Stack>
-              </Stack>
+                {reservation.note && (
+                  <Stack spacing={0.5} sx={{mt: 2}}>
+                    <Typography variant="body2" color="text.secondary">
+                      Nota
+                    </Typography>
+                    <Typography variant="body1">{reservation.note}</Typography>
+                  </Stack>
+                )}
+              </Paper>
 
-              {reservation.note && (
-                <Stack spacing={0.5} sx={{mt: 2}}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('reservations.detail.note')}
-                  </Typography>
-                  <Typography variant="body1">{reservation.note}</Typography>
-                </Stack>
-              )}
-            </Paper>
-
-            <Paper variant="outlined" sx={{p: 2}}>
-              <Typography variant="subtitle1" mb={1}>
-                {t('reservations.detail.vehicles')}
-              </Typography>
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        {t('reservations.detail.vehiclesTable.columns.id')}
-                      </TableCell>
-                      <TableCell>
-                        {t('reservations.detail.vehiclesTable.columns.brand')}
-                      </TableCell>
-                      <TableCell>
-                        {t('reservations.detail.vehiclesTable.columns.model')}
-                      </TableCell>
-                      <TableCell>
-                        {t('reservations.detail.vehiclesTable.columns.year')}
-                      </TableCell>
-                      <TableCell align="right">
-                        {t('reservations.detail.vehiclesTable.columns.amount')}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {reservation.items?.length ? (
-                      reservation.items.map((it, idx) => (
-                        <TableRow key={idx}>
-                          <TableCell>{it.vehicle_id}</TableCell>
-                          <TableCell>{it.brand_name}</TableCell>
-                          <TableCell>{it.model}</TableCell>
-                          <TableCell>{it.year}</TableCell>
-                          <TableCell align="right">
-                            {Number(it.line_amount).toLocaleString(undefined, {
-                              style: 'currency',
-                              currency: 'USD',
-                            })}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={5} align="center">
-                          —
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Paper>
-
-            {!isTerminal && (
               <Paper variant="outlined" sx={{p: 2}}>
                 <Typography variant="subtitle1" mb={1}>
-                  {t('reservations.detail.changeStatus.title')}
+                  Vehículos
+                </Typography>
+                <TableContainer>
+                  <Table size="small" stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>vehicle_id</TableCell>
+                        <TableCell align="right">line_amount</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {reservation.items?.length ? (
+                        reservation.items.map((it, idx) => (
+                          <TableRow key={idx}>
+                            <TableCell>{it.vehicle_id}</TableCell>
+                            <TableCell align="right">
+                              {Number(it.line_amount).toLocaleString(
+                                undefined,
+                                {
+                                  style: 'currency',
+                                  currency: 'USD',
+                                },
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={2} align="center">
+                            —
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Paper>
+
+              <Paper variant="outlined" sx={{p: 2}}>
+                <Typography variant="subtitle1" mb={1}>
+                  Cambiar estado
                 </Typography>
                 <Stack
                   direction={{xs: 'column', sm: 'row'}}
@@ -291,23 +303,12 @@ export default function ReservationDetailPage() {
                       onChange={e => setNewStatus(String(e.target.value))}
                       displayEmpty>
                       <MenuItem value="">
-                        <em>
-                          {t('reservations.detail.changeStatus.placeholder')}
-                        </em>
+                        <em>Selecciona un estado</em>
                       </MenuItem>
-                      {/* Solo estados con endpoint */}
-                      <MenuItem value="confirmed">
-                        {t('reservations.status.confirmed')}
-                      </MenuItem>
-                      <MenuItem value="active">
-                        {t('reservations.status.active')}
-                      </MenuItem>
-                      <MenuItem value="completed">
-                        {t('reservations.status.completed')}
-                      </MenuItem>
-                      <MenuItem value="declined">
-                        {t('reservations.status.declined')}
-                      </MenuItem>
+                      <MenuItem value="confirmed">Confirmada</MenuItem>
+                      <MenuItem value="active">En curso</MenuItem>
+                      <MenuItem value="completed">Finalizada</MenuItem>
+                      <MenuItem value="declined">Rechazada</MenuItem>
                     </Select>
                   </FormControl>
 
@@ -315,18 +316,13 @@ export default function ReservationDetailPage() {
                     variant="contained"
                     disabled={!newStatus || changing}
                     onClick={applyChangeStatus}>
-                    {changing
-                      ? t('reservations.detail.changeStatus.applying')
-                      : t('common.apply')}
+                    {changing ? 'Aplicando…' : 'Aplicar'}
                   </Button>
                 </Stack>
               </Paper>
-            )}
-            <Paper variant="outlined" sx={{p: 2}}>
-              <ReservationRatings reservation={reservation} />
-            </Paper>
-          </Stack>
-        )}
+            </Stack>
+          )}
+        </Box>
       </Box>
     </AppShell>
   );
