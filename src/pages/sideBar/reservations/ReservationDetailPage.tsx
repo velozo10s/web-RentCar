@@ -165,9 +165,11 @@ export default function ReservationDetailPage() {
             sx={{mb: 2, gap: 1, justifyContent: 'space-between'}}>
             <Typography variant="h6">Detalle de reserva</Typography>
             <Stack direction="row" gap={1}>
-              <Button variant="outlined" onClick={openContract}>
-                📄 Generar contrato
-              </Button>
+              {reservation?.status?.toLowerCase() === 'confirmed' && (
+                <Button variant="outlined" onClick={openContract}>
+                  📄 Generar contrato
+                </Button>
+              )}
               <Button onClick={() => navigate(-1)}>Volver</Button>
             </Stack>
           </Toolbar>
@@ -257,8 +259,8 @@ export default function ReservationDetailPage() {
                   <Table size="small" stickyHeader>
                     <TableHead>
                       <TableRow>
-                        <TableCell>vehicle_id</TableCell>
-                        <TableCell align="right">line_amount</TableCell>
+                        <TableCell>ID vehiculo</TableCell>
+                        <TableCell align="right">Costo</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>

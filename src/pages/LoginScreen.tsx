@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import {
   Box,
   Button,
-  Link,
   Paper,
   Stack,
   Typography,
@@ -151,29 +150,6 @@ export default function LoginPage() {
                   t('login.loginButton')
                 )}
               </Button>
-
-              <Box textAlign="center">
-                <Link
-                  component="button"
-                  type="button"
-                  onClick={() => navigate('/forgot-password')}
-                  underline="hover">
-                  {t('login.forgotPassword')}
-                </Link>
-              </Box>
-
-              <Stack
-                direction="row"
-                spacing={1}
-                justifyContent="center"
-                alignItems="center">
-                <Typography color="text.secondary">
-                  {t('login.noAccount')}
-                </Typography>
-                <Button variant="text" onClick={() => navigate('/sign-up')}>
-                  {t('signUp.title')}
-                </Button>
-              </Stack>
             </Stack>
           </Box>
         </FormikProvider>

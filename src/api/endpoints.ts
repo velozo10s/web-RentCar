@@ -150,13 +150,26 @@ export type MaintenanceUpcomingResp = {
   items: any[];
 };
 
+export type FrequentCustomerItem = {
+  user_id: number;
+  customer_name?: string;
+  document_number?: string;
+  reservation_count?: number | string;
+  reservations?: Array<{
+    id: number;
+    start_at: string;
+    end_at: string;
+    total_amount: number;
+  }>;
+};
+
 export type FrequentCustomersResp = {
   aggregates: {
     series: Array<{user_id: number; count: number}>;
     totalCustomers: number;
     totalReservations: number;
   };
-  items: any[];
+  items: FrequentCustomerItem[];
 };
 
 // ---------------- JSON calls (igual que antes) ----------------
