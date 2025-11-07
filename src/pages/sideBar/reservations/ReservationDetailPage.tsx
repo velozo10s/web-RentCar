@@ -323,12 +323,10 @@ export default function ReservationDetailPage() {
                   </Button>
                 </Stack>
               </Paper>
+              <Paper variant="outlined" sx={{p: 2}}>
+                <ReservationRatings reservation={reservation} />
+              </Paper>
             </Stack>
-          )}
-          {reservation && (
-            <Paper variant="outlined" sx={{p: 2}}>
-              <ReservationRatings reservation={reservation} />
-            </Paper>
           )}
         </Box>
       </Box>
