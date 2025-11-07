@@ -31,6 +31,7 @@ import {
   declineReservation,
 } from '../../../api/endpoints';
 import AppShell from '../../../components/AppShell';
+import ReservationRatings from '../../../components/molecules/ReservationRatings';
 
 export default function ReservationDetailPage() {
   const {id} = useParams();
@@ -323,6 +324,11 @@ export default function ReservationDetailPage() {
                 </Stack>
               </Paper>
             </Stack>
+          )}
+          {reservation && (
+            <Paper variant="outlined" sx={{p: 2}}>
+              <ReservationRatings reservation={reservation} />
+            </Paper>
           )}
         </Box>
       </Box>
